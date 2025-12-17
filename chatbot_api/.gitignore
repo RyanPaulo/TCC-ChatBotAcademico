@@ -1,0 +1,75 @@
+# Ambientes virtuais (os mais importantes de ignorar)
+.venv/
+.venv_api
+.env/
+.Dockerfile/
+env.txt/
+
+# Pastas e arquivos do Rasa que não precisam de versionamento
+.rasa/
+models/
+
+# Arquivos de cache e de configuração específicos do ambiente
+__pycache__/
+*.pyc
+
+# Arquivos de log e de banco de dados
+*.log
+*.sqlite
+cache.db
+
+# Arquivos da API do gemini
+.connectors/
+requirements_watcher.txt/
+requirements_gemini.txt/
+api_gemini - Copia/
+.para_ler/
+.connectors/
+.api_gemini/
+
+# Arquivos com segredos e configurações sensíveis
+**/test_teams_connection.py
+**/*secret*.py
+**/*credentials*.py
+**/*config*.py
+*.env
+.env.local
+.env.*.local
+
+# Arquivos de documentação gerados automaticamente
+CHATBOT_AUTH_EXAMPLES.md
+*.md
+!README.md
+
+# Arquivos temporários e de sistema
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Arquivos de IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos de backup
+*.bak
+*.backup
+*_backup.*
+
+# Arquivos do Office (podem conter informações sensíveis)
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.pptx
+*.ppt
+
+# Arquivos de teste e desenvolvimento
+test_*.py
+*_test.py
+*_tests.py

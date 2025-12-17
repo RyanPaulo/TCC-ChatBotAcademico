@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <!-- Configuração básica da página -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestão de Avisos - Painel Administrativo</title>
+
+    <!-- Carregamento otimizado de fontes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS específico da seção de avisos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calendario_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common_buttons.css') }}">
+    
+    <!-- Sistema de Toasts -->
+    {% include '_toasts.html' %}
+</head>
+<body class="page-body">
+    <!-- Cabeçalho principal - Padrão do painel -->
+    <header class="page-header">
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="{{ url_for('dashboard') }}" style="text-decoration: none;">
+                    <img class="header-logo" src="https://api.builder.io/api/v1/image/assets/TEMP/fb4d5eed694b229a53829dcdc98665ec0db0d36c?width=558" alt="UNIP">
+                </a>
+                <h1 class="header-title">Painel Administrativo</h1>
+            </div>
+            <div class="header-user">
+                <div class="user-info-panel">
+                    <div class="user-name-text">{{ user.nome|title if user and user.nome else '' }}</div>
+                    <div class="user-email-text">{{ user.email if user and user.email else '' }}</div>
+                </div>
+                <a href="{{ url_for('logout') }}" class="btn-logout">sair</a>
+            </div>
+        </div>
+        <div class="header-submenu">
+            <div class="submenu-wrapper">
+                <svg class="icon-menu" width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.9919 6.66468H1M23.9919 1H1M23.9919 12.3294H1M23.9919 17.994H1" stroke="white" stroke-width="1.9993" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="submenu-text">Menu</span>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('dashboard') }}" class="dropdown-item">Home</a>
+                    <a href="{{ url_for('calendario_list') }}" class="dropdown-item">Calendário</a>
+                    <a href="{{ url_for('conteudo_list') }}" class="dropdown-item">Conteúdo</a>
+                    <a href="{{ url_for('docentes_list') }}" class="dropdown-item">Informações Docentes</a>
+                    <a href="{{ url_for('infos_curso_list') }}" class="dropdown-item">Informações Curso</a>
+                    <a href="{{ url_for('avisos_list') }}" class="dropdown-item">Avisos</a>
+                    <a href="{{ url_for('duvidas_frequentes_list') }}" class="dropdown-item">Dúvidas Frequentes</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo principal -->
+    <main class="page-main">
+        <div class="container-card">
+            <div class="calendar-header">
+                <div class="calendar-title-wrapper">
+                    <svg class="calendar-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M35 15H5C3.61929 15 2.5 16.1193 2.5 17.5V32.5C2.5 33.8807 3.61929 35 5 35H35C36.3807 35 37.5 33.8807 37.5 32.5V17.5C37.5 16.1193 36.3807 15 35 15Z" fill="#3292F9"/>
+                        <path d="M35 5H5C3.61929 5 2.5 6.11929 2.5 7.5V12.5C2.5 13.8807 3.61929 15 5 15H35C36.3807 15 37.5 13.8807 37.5 12.5V7.5C37.5 6.11929 36.3807 5 35 5Z" fill="#3292F9"/>
+                        <path d="M8.75 8.75H31.25V11.25H8.75V8.75Z" fill="white"/>
+                        <path d="M8.75 20H31.25V22.5H8.75V20Z" fill="white"/>
+                        <path d="M8.75 25H31.25V27.5H8.75V25Z" fill="white"/>
+                        <path d="M8.75 30H31.25V32.5H8.75V30Z" fill="white"/>
+                    </svg>
+                    <h2 class="calendar-title">Avisos</h2>
+                </div>
+            </div>
+            
+            <div class="separator-line"></div>
+
+            <!-- Sistema de mensagens flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="messages-area" style="display: none;">
+                        {% for category, message in messages %}
+                            <div class="message-box message-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Barra de ações e filtros -->
+            {% if user and user.tipo and user.tipo|lower in ['admin', 'professor', 'coordenador'] %}
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                <a href="{{ url_for('avisos_add') }}" class="btn-add-inline">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Criar Novo Aviso</span>
+                </a>
+                
+                <!-- Filtros e busca -->
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="search-avisos" placeholder="Buscar avisos..." style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; min-width: 200px;">
+                    <select id="filter-order" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                        <option value="recentes">Mais recentes</option>
+                        <option value="antigos">Mais antigos</option>
+                        <option value="titulo-asc">Título (A-Z)</option>
+                        <option value="titulo-desc">Título (Z-A)</option>
+                    </select>
+                </div>
+            </div>
+            {% else %}
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                <!-- Filtros e busca -->
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="search-avisos" placeholder="Buscar avisos..." style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; min-width: 200px;">
+                    <select id="filter-order" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                        <option value="recentes">Mais recentes</option>
+                        <option value="antigos">Mais antigos</option>
+                        <option value="titulo-asc">Título (A-Z)</option>
+                        <option value="titulo-desc">Título (Z-A)</option>
+                    </select>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Lista de avisos -->
+            {% if avisos and avisos|length > 0 %}
+                <ul class="avisos-list" id="avisos-list">
+                    {% for aviso in avisos %}
+                        <li class="aviso-item" data-titulo="{{ aviso.titulo|lower }}" data-data="{{ aviso.data }}">
+                            <a href="{{ url_for('avisos_view', aviso_id=aviso.id_aviso) }}" class="aviso-link">
+                                <div class="aviso-main">
+                                    <div class="aviso-title-text">{{ aviso.titulo }}</div>
+                                    <div class="aviso-meta-text">
+                                        <span class="aviso-date">{{ aviso.data }}</span>
+                                        <span class="aviso-author">
+                                            {% if aviso.id_professor %}
+                                                Professor
+                                            {% elif aviso.id_coordenador %}
+                                                Coordenador
+                                            {% else %}
+                                                Sistema
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                            {% if user and user.tipo and user.tipo|lower in ['admin', 'professor', 'coordenador'] %}
+                            <div class="aviso-actions" onclick="event.stopPropagation();">
+                                <a href="{{ url_for('avisos_edit', aviso_id=aviso.id_aviso) }}" class="btn-edit-info" title="Editar">
+                                    <svg class="icon-edit" width="16" height="16" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M23.375 4.00008C23.7361 3.64989 24.1649 3.3721 24.6367 3.18258C25.1086 2.99305 25.6143 2.89551 26.125 2.89551C26.6357 2.89551 27.1414 2.99305 27.6133 3.18258C28.0851 3.3721 28.5139 3.64989 28.875 4.00008C29.2361 4.35027 29.5226 4.76601 29.7181 5.22355C29.9135 5.6811 30.0141 6.1715 30.0141 6.66674C30.0141 7.16199 29.9135 7.65239 29.7181 8.10993C29.5226 8.56748 29.2361 8.98322 28.875 9.33341L10.3125 27.3334L2.75 29.3334L4.8125 22.0001L23.375 4.00008Z" stroke="#2C8DFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>Editar</span>
+                                </a>
+                                <form method="POST" action="{{ url_for('avisos_delete', aviso_id=aviso.id_aviso) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover este aviso?')">
+                                    <button type="submit" class="btn-edit-info" style="background-color: #dc3545; color: white; border: none; cursor: pointer;" title="Remover">
+                                        <svg class="icon-edit" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span>Apagar</span>
+                                    </button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <!-- Estado vazio -->
+                <div class="empty-state">
+                    <p class="empty-text">Nenhum aviso encontrado.</p>
+                    {% if user and user.tipo and user.tipo|lower in ['admin', 'professor', 'coordenador'] %}
+                    <a class="btn-add-empty" href="{{ url_for('avisos_add') }}">Criar Primeiro Aviso</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- JavaScript para funcionalidades interativas -->
+    <script>
+        let allAvisos = [];
+        
+        // Inicializar lista de avisos
+        document.addEventListener('DOMContentLoaded', function() {
+            const avisoItems = document.querySelectorAll('.aviso-item');
+            allAvisos = Array.from(avisoItems).map(item => ({
+                element: item,
+                titulo: item.dataset.titulo || item.querySelector('.aviso-title-text')?.textContent.toLowerCase() || '',
+                data: item.dataset.data || item.querySelector('.aviso-date')?.textContent || ''
+            }));
+        });
+        
+        // Busca em tempo real
+        const searchInput = document.getElementById('search-avisos');
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                const avisoItems = document.querySelectorAll('.aviso-item');
+                
+                avisoItems.forEach(item => {
+                    const titulo = item.dataset.titulo || item.querySelector('.aviso-title-text')?.textContent.toLowerCase() || '';
+                    
+                    if (searchTerm === '' || titulo.includes(searchTerm)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // Reordenar após busca
+                applyOrder();
+            });
+        }
+
+        // Função para aplicar ordenação
+        function applyOrder() {
+            const filterSelect = document.getElementById('filter-order');
+            if (!filterSelect) return;
+            
+            const order = filterSelect.value;
+            const avisoList = document.getElementById('avisos-list');
+            if (!avisoList) return;
+            
+            // Filtrar apenas itens visíveis
+            const visibleItems = Array.from(avisoList.querySelectorAll('.aviso-item'))
+                .filter(item => item.style.display !== 'none')
+                .map(item => ({
+                    element: item,
+                    titulo: item.dataset.titulo || item.querySelector('.aviso-title-text')?.textContent.toLowerCase() || '',
+                    data: item.dataset.data || item.querySelector('.aviso-date')?.textContent || ''
+                }));
+            
+            // Ordenar
+            let sorted = [];
+            if (order === 'recentes') {
+                sorted = visibleItems.sort((a, b) => {
+                    const dateA = new Date(a.data) || new Date(0);
+                    const dateB = new Date(b.data) || new Date(0);
+                    return dateB - dateA; // Mais recentes primeiro
+                });
+            } else if (order === 'antigos') {
+                sorted = visibleItems.sort((a, b) => {
+                    const dateA = new Date(a.data) || new Date(0);
+                    const dateB = new Date(b.data) || new Date(0);
+                    return dateA - dateB; // Mais antigos primeiro
+                });
+            } else if (order === 'titulo-asc') {
+                sorted = visibleItems.sort((a, b) => {
+                    return a.titulo.localeCompare(b.titulo, 'pt-BR');
+                });
+            } else if (order === 'titulo-desc') {
+                sorted = visibleItems.sort((a, b) => {
+                    return b.titulo.localeCompare(a.titulo, 'pt-BR');
+                });
+            } else {
+                sorted = visibleItems;
+            }
+            
+            // Reordenar no DOM
+            sorted.forEach(item => {
+                avisoList.appendChild(item.element);
+            });
+        }
+
+        // Filtro por ordenação
+        const filterSelect = document.getElementById('filter-order');
+        if (filterSelect) {
+            filterSelect.addEventListener('change', function(e) {
+                applyOrder();
+            });
+        }
+    </script>
+    
+    <style>
+        /* Estilos específicos para avisos seguindo padrão do calendário */
+        .avisos-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .aviso-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: box-shadow 0.2s;
+        }
+        
+        .aviso-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .aviso-link {
+            flex: 1;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+        
+        .aviso-main {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .aviso-title-text {
+            font-weight: 600;
+            font-size: 16px;
+            color: #023D71;
+        }
+        
+        .aviso-meta-text {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .aviso-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+    </style>
+</body>
+</html>

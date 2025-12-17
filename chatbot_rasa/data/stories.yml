@@ -1,0 +1,141 @@
+version: "3.1"
+
+stories:
+- story: Usuario pede avisos
+  steps:
+  - intent: consultar_aviso
+  - action: action_buscar_ultimos_avisos
+
+- story: Usuario pede data de prova
+  steps:
+  - intent: consultar_data_avaliacao
+  - action: action_buscar_data_avaliacao
+
+- story: Usuario pede horario de aula
+  steps:
+  - intent: consultar_horario_aula
+  - action: action_buscar_cronograma
+
+- story: Usuario pede info de professor (email)
+  steps:
+  - intent: solicitar_info_docente
+  - action: action_buscar_info_docente
+
+- story: Usuario pede horario de atendimento de docente
+  steps:
+  - intent: solicitar_atendimento_docente
+  - slot_was_set:
+    - nome_docente: true
+  - action: action_buscar_atendimento_docente
+
+- story: Usuario pede horario de atendimento sem especificar nome
+  steps:
+  - intent: solicitar_atendimento_docente
+  - action: utter_ask_nome_docente
+  - action: form_atendimento_docente
+  - active_loop: form_atendimento_docente
+  - action: form_atendimento_docente
+  - active_loop: null
+  - action: action_buscar_atendimento_docente
+
+# A HISTORIA CONFLITANTE FOI REMOVIDA DAQUI
+
+- story: Usuario pede IA
+  steps:
+  - intent: perguntar_conteudo_ia
+  - action: action_gerar_resposta_com_ia
+
+- story: Usuario pede informacoes sobre APS
+  steps:
+  - intent: consultar_regras_aps
+  - action: action_buscar_info_atividade_academica
+
+- story: Usuario pede informacoes sobre TCC
+  steps:
+  - intent: consultar_regras_tcc
+  - action: action_buscar_info_atividade_academica
+
+- story: Usuario pede informacoes sobre Estagio
+  steps:
+  - intent: consultar_estagio
+  - action: action_buscar_info_atividade_academica
+
+- story: Usuario pede informacoes sobre Horas Complementares
+  steps:
+  - intent: consultar_horas_complementares
+  - action: action_buscar_info_atividade_academica
+
+- story: Usuario pede material de aula com disciplina
+  steps:
+  - intent: solicitar_material_aula
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_material
+
+- story: Usuario pede material de aula sem disciplina
+  steps:
+  - intent: solicitar_material_aula
+  - action: utter_ask_disciplina
+  - action: form_buscar_material
+  - active_loop: form_buscar_material
+  - action: form_buscar_material
+  - active_loop: null
+  - action: action_buscar_material
+
+- story: Usuario pergunta quantidade de materias
+  steps:
+  - intent: consultar_quantidade_materias
+  - action: action_buscar_quantidade_materias
+
+- story: Usuario pergunta quantidade de alunos na turma
+  steps:
+  - intent: consultar_quantidade_alunos_turma
+  - action: action_consultar_quantidade_alunos_turma
+
+- story: Usuario pergunta informacoes do curso
+  steps:
+  - intent: consultar_info_curso
+  - action: action_buscar_info_curso
+
+- story: Usuario pergunta ementa com disciplina
+  steps:
+  - intent: consultar_ementa
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_ementa
+
+- story: Usuario pergunta ementa sem disciplina
+  steps:
+  - intent: consultar_ementa
+  - action: action_buscar_ementa
+
+- story: Usuario lista disciplinas
+  steps:
+  - intent: listar_disciplinas
+  - action: action_listar_disciplinas
+
+- story: Usuario pergunta provas por mes
+  steps:
+  - intent: consultar_provas_por_mes
+  - action: action_buscar_provas_por_mes
+
+- story: Usuario pergunta conteudo de avaliacao com disciplina e tipo
+  steps:
+  - intent: consultar_conteudo_avaliacao
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_conteudo_avaliacao
+
+- story: Usuario pergunta conteudo de avaliacao sem tipo
+  steps:
+  - intent: consultar_conteudo_avaliacao
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_conteudo_avaliacao
+
+- story: Usuario pergunta conteudo apos consultar data de prova
+  steps:
+  - intent: consultar_data_avaliacao
+  - action: action_buscar_data_avaliacao
+  - intent: consultar_conteudo_avaliacao
+  - action: action_buscar_conteudo_avaliacao

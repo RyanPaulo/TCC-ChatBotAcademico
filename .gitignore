@@ -1,0 +1,389 @@
+# ============================================
+# TCC-CHATBOTACADEMICO - .gitignore Unificado
+# ============================================
+# Este arquivo unifica os .gitignore de:
+# - chatbot_api
+# - chatbot_rasa  
+# - chatbot_web
+#
+# NOTA: Padrões sem barra inicial (/) funcionam recursivamente em todas
+# as subpastas. Exemplo: .venv/ ignora .venv/ na raiz E em qualquer subpasta.
+# Os padrões explícitos abaixo são redundantes mas garantem cobertura total.
+# ============================================
+
+# ============================================
+# AMBIENTES VIRTUAIS PYTHON
+# ============================================
+.venv/
+.venv*/
+venv/
+venv*/
+env/
+ENV/
+.ENV/
+virtualenv/
+.venv_api/
+.venv_rasa/
+.venv_web/
+.venv-linux/
+.venv_watcher/
+venv.bak/
+venv_backup/
+
+# ============================================
+# ARQUIVOS COMPILADOS E CACHE PYTHON
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ============================================
+# ARQUIVOS DE CONFIGURAÇÃO E AMBIENTE
+# ============================================
+# Arquivos .env contêm informações sensíveis (chaves API, tokens, etc.)
+.env
+.env*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+config.local.*
+*.local
+
+# Arquivos de configuração processados com credenciais expostas
+credentials.yml.processed
+**/*secret*.py
+**/*credentials*.py
+
+# Arquivos de teste (podem conter dados de teste ou credenciais)
+**/test_*.py
+test_*.py
+*_test.py
+*_tests.py
+test_teams_connection.py
+
+# ============================================
+# CREDENCIAIS E SEGREDOS
+# ============================================
+.secrets/
+secrets/
+*.secret
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.keystore
+*.jks
+
+# ============================================
+# RASA - ARQUIVOS E PASTAS ESPECÍFICOS
+# ============================================
+.rasa/
+models/
+credentials.yml.processed
+
+# ============================================
+# LOGS E ARQUIVOS DE DEPURAÇÃO
+# ============================================
+*.log
+*.log.*
+logs/
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+rasa_bot.log
+
+# ============================================
+# BANCOS DE DADOS
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+cache.db
+
+# Dumps de banco de dados (podem conter dados sensíveis)
+# NOTA: Arquivos de schema como supabase_bd.sql são versionados
+*.sql.dump
+*.sql.backup
+*_dump.sql
+*_backup.sql
+*_data.sql
+*.dump.sql
+
+# ============================================
+# ARQUIVOS TEMPORÁRIOS E BACKUP
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+*~
+.cache/
+*.cache
+
+# Arquivos temporários de documentação e desenvolvimento
+docs_consulta/
+propostas_cursor/
+temporary_documents_folder/
+*.upload
+*.uploaded
+test_*.txt
+*_test.txt
+*_temp.txt
+*_rascunho.txt
+*_draft.txt
+
+# ============================================
+# ARQUIVOS E PASTAS DO SISTEMA OPERACIONAL
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ============================================
+# IDEs E EDITORES
+# ============================================
+.idea/
+.vscode/
+.cursor/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+*.sublime-*
+.vscode-test
+*.code-workspace
+.fleet/
+.history/
+
+# ============================================
+# ARQUIVOS DA API GEMINI E CONECTORES
+# ============================================
+.connectors/
+.api_gemini/
+api_gemini - Copia/
+.para_ler/
+requirements_watcher.txt/
+requirements_gemini.txt/
+requirements_rasa.txt/
+exit/
+ComandosParaExecução.txt/
+ComandosParaExecução/
+__pycache__/
+
+# ============================================
+# ARQUIVOS DO OFFICE (podem conter informações sensíveis)
+# ============================================
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.pptx
+*.ppt
+
+# ============================================
+# DOCUMENTAÇÃO E MARKDOWN
+# ============================================
+# Ignora todos os .md exceto README.md
+*.md
+!README.md
+README*.md
+!README*.md
+*.md.bak
+CHATBOT_AUTH_EXAMPLES.md
+CORRECAO_SESSAO_AUTENTICACAO.md
+CORRECOES_AUTENTICACAO.md
+GUIA_COMANDOS.md
+IMPLEMENTACAO_AUTENTICACAO.md
+PROMPT_AUTH_RASA.md
+COMO_CONFIGURAR_ENV.txt
+*_CONFIGURACAO*.txt
+*_GUIA*.txt
+*_INSTRUCOES*.txt
+
+# ============================================
+# FLASK E APLICAÇÕES WEB
+# ============================================
+instance/
+.webassets-cache
+flask_session/
+sessions/
+*.session
+*.cookie
+
+# ============================================
+# ARQUIVOS DE UPLOAD E MÍDIA TEMPORÁRIA
+# ============================================
+uploads/
+temp/
+tmp/
+media/temp/
+static/uploads/
+static/temp/
+
+# ============================================
+# TESTES E COVERAGE
+# ============================================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+cython_debug/
+*.cover
+*.py,cover
+test-results/
+test-reports/
+junit.xml
+coverage.xml
+.nyc_output/
+
+# ============================================
+# BUILD E DISTRIBUIÇÃO
+# ============================================
+*.whl
+*.tar.gz
+*.zip
+sdist/
+wheel/
+
+# ============================================
+# DEPENDÊNCIAS E GESTORES DE PACOTES
+# ============================================
+pip-log.txt
+pip-delete-this-directory.txt
+node_modules/
+package-lock.json
+yarn.lock
+.npm
+.yarn-integrity
+
+# ============================================
+# JUPYTER NOTEBOOK
+# ============================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# ============================================
+# DOCKER E CONTAINERS
+# ============================================
+.Dockerfile/
+docker-compose.override.yml
+.env.docker
+docker-compose.local.yml
+
+# ============================================
+# CONFIGURAÇÕES ADICIONAIS
+# ============================================
+.config/
+.config/builderio/
+*.config.local
+*.config.local.*
+env.txt/
+
+# ============================================
+# ARQUIVOS ESPECÍFICOS DO PROJETO
+# ============================================
+# Arquivos de processo e comandos temporários
+exit
+ComandosParaExecução
+Procifile/
+
+# ============================================
+# CONFIGURAÇÕES ESPECÍFICAS DO PYTHON
+# ============================================
+.python-version
+.pythin-version/
+
+# ============================================
+# PADRÕES EXPLÍCITOS PARA SUBPASTAS
+# ============================================
+# Garantindo que ambientes virtuais em subpastas sejam ignorados
+chatbot_api/.venv/
+chatbot_api/.venv_api/
+chatbot_api/venv/
+chatbot_api/.venv*/
+chatbot_api/venv*/
+
+chatbot_rasa/.venv/
+chatbot_rasa/.venv_rasa/
+chatbot_rasa/venv/
+chatbot_rasa/.venv*/
+chatbot_rasa/venv*/
+chatbot_rasa/.rasa/
+chatbot_rasa/models/
+chatbot_rasa/credentials.yml.processed
+
+chatbot_web/.venv/
+chatbot_web/.venv_web/
+chatbot_web/venv/
+chatbot_web/venv_web/
+chatbot_web/.venv*/
+chatbot_web/venv*/
+
+# Garantindo que arquivos .env em subpastas sejam ignorados
+chatbot_api/.env
+chatbot_api/.env*
+chatbot_rasa/.env
+chatbot_rasa/.env*
+chatbot_web/.env
+chatbot_web/.env*
+
+# Garantindo que pastas temporárias em subpastas sejam ignoradas
+chatbot_api/temporary_documents_folder/
+chatbot_api/.connectors/
+chatbot_api/.api_gemini/
+
+# Garantindo que __pycache__ e arquivos compilados em subpastas sejam ignorados
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Garantindo que arquivos de log em subpastas sejam ignorados
+**/*.log
+chatbot_rasa/rasa_bot.log
+
+# Garantindo que pastas de IDE em subpastas sejam ignoradas
+**/.idea/
+**/.vscode/
+**/.cursor/
+

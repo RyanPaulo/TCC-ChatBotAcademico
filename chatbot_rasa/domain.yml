@@ -1,0 +1,207 @@
+version: "3.1"
+
+intents:
+  - saudar
+  - despedir
+  - agradecer
+  - solicitar_ajuda
+  - bot_challenge
+  - consultar_data_avaliacao
+  - consultar_horario_aula
+  - consultar_aviso
+  - consultar_regras_aps
+  - consultar_regras_tcc
+  - consultar_estagio
+  - consultar_horas_complementares
+  - solicitar_info_docente
+  - solicitar_atendimento_docente
+  - perguntar_conteudo_ia
+  - solicitar_material_aula
+  - informar_disciplina  # <-- ADICIONADO
+  - consultar_duvidas_frequentes
+  - consultar_quantidade_alunos_turma
+  - consultar_quantidade_materias
+  - listar_disciplinas
+  - consultar_info_curso
+  - consultar_provas_por_mes
+  - consultar_ementa
+  - consultar_conteudo_avaliacao
+  - informar_email  # <-- ADICIONADO para autenticação
+  - informar_digito_ra  # <-- ADICIONADO para autenticação
+
+entities:
+  - disciplina
+  - nome_docente
+  - tipo_avaliacao
+  - atividade_academica
+  - topico_estudo
+  - email_institucional  # <-- ADICIONADO para autenticação
+  - mes
+
+slots:
+  disciplina:
+    type: text
+    influence_conversation: true # <-- ADICIONADO
+    mappings:
+    - type: from_entity
+      entity: disciplina
+    - type: from_text  # <-- ADICIONADO (Impede alucinacao)
+      conditions:
+      - active_loop: form_buscar_material
+  
+  nome_docente:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: nome_docente
+    - type: from_text
+      conditions:
+      - active_loop: form_atendimento_docente
+
+  # Slots para autenticação
+  email_institucional:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: email_institucional
+    - type: from_text
+      conditions:
+      - active_loop: form_autenticacao
+
+  matricula_ra:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+  access_token:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+  autenticado:
+    type: bool
+    influence_conversation: true
+    mappings:
+    - type: custom
+
+  tipo_pergunta_ra:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+  parametro_pergunta_ra:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+  ultima_atividade_timestamp:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+  # Slots para contexto de conversa
+  ultima_disciplina_consultada:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: custom
+
+  ultima_consulta_tipo:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: custom
+
+  ultima_avaliacao_tipo:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+responses:
+  utter_despedida:
+  - text: "Ate mais. Bons estudos."
+  utter_agradecer:
+  - text: "De nada! Fico feliz em ajudar."
+  utter_iamabot:
+  - text: "Sou um assistente virtual academico treinado para tirar suas duvidas."
+  utter_ajuda:
+  - text: "Posso ajudar com datas de provas e aulas, conteudos de materias, informacoes sobre TCC, APS e Estagio e contato de professores."
+  utter_default:
+  - text: "Desculpe, nao entendi. Pode perguntar de outra forma?"
+  utter_ask_nome_docente:
+  - text: "Claro. De qual professor ou coordenador voce quer saber o horario de atendimento?"
+  utter_ask_disciplina: # <-- ADICIONADO
+  - text: "Claro. De qual disciplina voce quer o material?"
+  # Responses para autenticação
+  utter_ask_email:
+  - text: "Por favor, informe seu email institucional."
+  utter_ask_digito_ra:
+  - text: "Agora informe o 5º digito do seu RA?"
+  utter_autenticacao_sucesso:
+  - text: "Autenticacao realizada com sucesso! Agora posso te ajudar com suas duvidas academicas."
+  utter_autenticacao_erro:
+  - text: "Resposta do RA incorreta. Tente novamente."
+  utter_email_nao_encontrado:
+  - text: "Aluno nao encontrado com este email. Por favor, verifique e tente novamente."
+
+actions:
+  - action_buscar_ultimos_avisos
+  - action_buscar_cronograma
+  - action_buscar_data_avaliacao
+  - action_listar_todas_provas
+  - action_buscar_info_docente
+  - action_buscar_info_atividade_academica
+  - action_gerar_resposta_com_ia
+  - action_buscar_atendimento_docente
+  - action_buscar_material
+  - action_buscar_quantidade_materias
+  - action_listar_disciplinas
+  - action_buscar_info_curso
+  - action_buscar_provas_por_mes
+  - action_buscar_ementa  # <-- ADICIONADO para buscar ementa
+  - action_buscar_conteudo_avaliacao  # <-- ADICIONADO para buscar conteúdo de avaliação
+  - action_buscar_aluno_por_email  # <-- ADICIONADO para autenticação
+  - action_autenticar_chatbot  # <-- ADICIONADO para autenticação
+  - action_verificar_autenticacao  # <-- ADICIONADO para verificar autenticação
+  - action_escolher_pergunta_ra  # <-- ADICIONADO para escolher pergunta aleatória
+  - action_fazer_pergunta_ra  # <-- ADICIONADO para fazer pergunta dinâmica
+  - action_deletar_mensagens_sensiveis  # <-- ADICIONADO para deletar mensagens sensíveis do Telegram
+  - action_consultar_quantidade_alunos_turma  # <-- ADICIONADO para consultar quantidade de alunos na turma
+  - action_saudacao  # <-- ADICIONADO para saudação dinâmica baseada no horário
+
+forms:
+  form_atendimento_docente:
+    required_slots:
+    - nome_docente
+    ignored_intents:
+    - agradecer
+    - saudar
+    - despedir
+  
+  form_buscar_material: # <-- ADICIONADO
+    required_slots:
+    - disciplina
+    ignored_intents:
+    - agradecer
+    - saudar
+    - despedir
+
+  form_autenticacao: # <-- ADICIONADO para autenticação
+    required_slots:
+    - email_institucional
+    ignored_intents:
+    - agradecer
+    - saudar
+    - despedir
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

@@ -1,0 +1,245 @@
+version: "3.1"
+
+rules:
+
+- rule: Responder saudacao e verificar autenticacao
+  steps:
+  - intent: saudar
+  - action: action_verificar_autenticacao
+  - action: action_saudacao
+  - action: form_autenticacao
+  - active_loop: form_autenticacao
+
+- rule: Responder despedida
+  steps:
+  - intent: despedir
+  - action: utter_despedida
+
+- rule: Responder agradecimento
+  steps:
+  - intent: agradecer
+  - action: utter_agradecer
+
+- rule: Responder quem e o bot
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Explicar o que o bot faz
+  steps:
+  - intent: solicitar_ajuda
+  - action: utter_ajuda
+
+- rule: Ativar IA para conteudo
+  steps:
+  - intent: perguntar_conteudo_ia
+  - action: action_gerar_resposta_com_ia
+
+- rule: Consultar Avisos
+  steps:
+  - intent: consultar_aviso
+  - action: action_buscar_ultimos_avisos
+
+- rule: Consultar APS
+  steps:
+  - intent: consultar_regras_aps
+  - action: action_buscar_info_atividade_academica
+
+- rule: Consultar TCC
+  steps:
+  - intent: consultar_regras_tcc
+  - action: action_buscar_info_atividade_academica
+
+- rule: Consultar Estagio
+  steps:
+  - intent: consultar_estagio
+  - action: action_buscar_info_atividade_academica
+
+- rule: Consultar Horas Complementares
+  steps:
+  - intent: consultar_horas_complementares
+  - action: action_buscar_info_atividade_academica
+
+- rule: Consultar horario quando disciplina fornecida
+  steps:
+  - intent: consultar_horario_aula
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_cronograma
+
+- rule: Consultar horario (sem disciplina - action decide)
+  steps:
+  - intent: consultar_horario_aula
+  - action: action_buscar_cronograma
+
+- rule: Consultar ementa quando disciplina fornecida
+  steps:
+  - intent: consultar_ementa
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_ementa
+
+- rule: Consultar ementa (sem disciplina - action decide)
+  steps:
+  - intent: consultar_ementa
+  - action: action_buscar_ementa
+
+- rule: Consultar data avaliacao quando disciplina fornecida
+  steps:
+  - intent: consultar_data_avaliacao
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_data_avaliacao
+
+- rule: Consultar data avaliacao (sem disciplina - action decide)
+  steps:
+  - intent: consultar_data_avaliacao
+  - action: action_buscar_data_avaliacao
+
+- rule: Usuario informa disciplina apos pergunta sobre avaliacao
+  condition:
+  - slot_was_set:
+    - disciplina: true
+  steps:
+  - intent: informar_disciplina
+  - action: action_buscar_data_avaliacao
+
+- rule: Consultar conteudo avaliacao quando disciplina e tipo fornecidos
+  steps:
+  - intent: consultar_conteudo_avaliacao
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_conteudo_avaliacao
+
+- rule: Consultar conteudo avaliacao (sem disciplina ou tipo - action decide)
+  steps:
+  - intent: consultar_conteudo_avaliacao
+  - action: action_buscar_conteudo_avaliacao
+
+- rule: Consultar quantidade de materias
+  steps:
+  - intent: consultar_quantidade_materias
+  - action: action_buscar_quantidade_materias
+
+- rule: Listar disciplinas do aluno
+  steps:
+  - intent: listar_disciplinas
+  - action: action_listar_disciplinas
+
+- rule: Consultar informacoes do curso
+  steps:
+  - intent: consultar_info_curso
+  - action: action_buscar_info_curso
+
+- rule: Buscar info docente quando nome fornecido
+  steps:
+  - intent: solicitar_info_docente
+  - slot_was_set:
+    - nome_docente: true
+  - action: action_buscar_info_docente
+
+- rule: Buscar info docente (sem nome - action decide)
+  steps:
+  - intent: solicitar_info_docente
+  - action: action_buscar_info_docente
+
+- rule: Buscar atendimento quando nome fornecido
+  steps:
+  - intent: solicitar_atendimento_docente
+  - slot_was_set:
+    - nome_docente: true
+  - action: action_buscar_atendimento_docente
+
+# --- FORMULARIO DE ATENDIMENTO ---
+- rule: Ativar formulario de atendimento se o nome faltar
+  steps:
+  - intent: solicitar_atendimento_docente
+  - slot_was_set:
+    - nome_docente: null
+  - action: utter_ask_nome_docente # Pergunta o nome
+  - action: form_atendimento_docente
+  - active_loop: form_atendimento_docente
+
+- rule: Enviar formulario de atendimento quando o slot for preenchido
+  condition:
+  - active_loop: form_atendimento_docente # Se o form estiver ativo
+  - slot_was_set:
+    - nome_docente: true # E o slot 'nome_docente' for preenchido (pelo 'from_text')
+  steps:
+  - action: form_atendimento_docente # Preenche o formulario
+  - active_loop: null # Desativa o formulario
+  - action: action_buscar_atendimento_docente # Roda a acao
+
+# --- CORRECOES DE WARNINGS ---
+# SUBSTITUA ESTA REGRA:
+# - rule: Buscar material de aula
+#   steps:
+#   - intent: solicitar_material_aula
+#   - action: action_buscar_material
+
+# POR ESTAS DUAS:
+- rule: Buscar material quando disciplina fornecida
+  steps:
+  - intent: solicitar_material_aula
+  - slot_was_set:
+    - disciplina: true
+  - action: action_buscar_material
+
+- rule: Ativar formulario de material se a disciplina faltar
+  steps:
+  - intent: solicitar_material_aula
+  - slot_was_set:
+    - disciplina: null
+  - action: utter_ask_disciplina # Pergunta a disciplina
+  - action: form_buscar_material
+  - active_loop: form_buscar_material
+
+- rule: Enviar formulario de material quando o slot for preenchido
+  condition:
+  - active_loop: form_buscar_material # Se o form estiver ativo
+  - slot_was_set:
+    - disciplina: true # E o slot 'disciplina' for preenchido
+  steps:
+  - action: form_buscar_material # Preenche o formulario
+  - active_loop: null # Desativa o formulario
+  - action: action_buscar_material # Roda a acao
+
+# Regra para quando usuário informa disciplina sem contexto (não deve ativar formulário automaticamente)
+# Esta regra foi removida para evitar confusão - o bot deve perguntar o que o usuário quer fazer
+
+# REGRA REMOVIDA: Dúvidas frequentes devem ser apenas armazenadas, não respondidas pelo chatbot
+# - rule: Consultar duvidas frequentes
+#   steps:
+#   - intent: consultar_duvidas_frequentes
+#   - action: action_buscar_duvidas_frequentes
+
+- rule: Consultar quantidade de alunos na turma
+  steps:
+  - intent: consultar_quantidade_alunos_turma
+  - action: action_consultar_quantidade_alunos_turma
+
+- rule: Acionar fallback padrao quando nao entender
+  steps:
+  - intent: nlu_fallback
+  - action: utter_default
+
+# --- REGRAS DE AUTENTICAÇÃO ---
+- rule: Buscar aluno quando email fornecido no form
+  condition:
+  - active_loop: form_autenticacao
+  - slot_was_set:
+    - email_institucional: true
+  steps:
+  - action: form_autenticacao
+  - active_loop: null
+  - action: action_buscar_aluno_por_email
+  - action: action_escolher_pergunta_ra
+  - action: action_fazer_pergunta_ra
+
+- rule: Autenticar quando digito RA fornecido
+  condition:
+  - slot_was_set:
+    - matricula_ra: true
+  steps:
+  - intent: informar_digito_ra
+  - action: action_autenticar_chatbot

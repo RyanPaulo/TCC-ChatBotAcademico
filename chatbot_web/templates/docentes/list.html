@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Informações Docentes - Lista</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/docentes_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common_buttons.css') }}">
+</head>
+<body class="page-body">
+  <header class="page-header">
+    <div class="header-top">
+      <div class="header-brand">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none;">
+          <img class="header-logo" src="https://api.builder.io/api/v1/image/assets/TEMP/fb4d5eed694b229a53829dcdc98665ec0db0d36c?width=558" alt="UNIP">
+        </a>
+        <h1 class="header-title">Painel Administrativo</h1>
+      </div>
+      <div class="header-user">
+        <div class="user-info-panel">
+          <div class="user-name-text">{{ user.nome|title if user and user.nome else '' }}</div>
+          <div class="user-email-text">{{ user.email if user and user.email else '' }}</div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-logout">sair</a>
+      </div>
+    </div>
+    <div class="header-submenu">
+      <div class="submenu-wrapper">
+        <svg class="icon-menu" width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23.9919 6.66468H1M23.9919 1H1M23.9919 12.3294H1M23.9919 17.994H1" stroke="white" stroke-width="1.9993" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="submenu-text">Menu</span>
+        <div class="dropdown-menu">
+          <a href="{{ url_for('dashboard') }}" class="dropdown-item">Home</a>
+          <a href="{{ url_for('calendario_list') }}" class="dropdown-item">Calendário</a>
+          <a href="{{ url_for('conteudo_list') }}" class="dropdown-item">Conteúdo</a>
+          <a href="{{ url_for('docentes_list') }}" class="dropdown-item">Informações Docentes</a>
+          <a href="{{ url_for('infos_curso_list') }}" class="dropdown-item">Informações Curso</a>
+          <a href="{{ url_for('avisos_list') }}" class="dropdown-item">Avisos</a>
+          <a href="{{ url_for('duvidas_frequentes_list') }}" class="dropdown-item">Dúvidas Frequentes</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <div class="container-card">
+      <div class="calendar-header">
+        <div class="calendar-title-wrapper">
+          <svg class="calendar-icon" width="52" height="63" viewBox="0 0 52 63" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M41.4 16.1539C41.4 25.0754 34.4492 32.3077 25.875 32.3077C17.3008 32.3077 10.35 25.0754 10.35 16.1539C10.35 7.23233 17.3008 0 25.875 0C34.4492 0 41.4 7.23233 41.4 16.1539Z" fill="#023D71"/>
+            <path d="M0 56.4244C0 45.7816 7.437 37.1538 16.611 37.1538H35.139C44.313 37.1538 51.75 45.7816 51.75 56.4244V57.0706C51.75 60.3453 49.4617 63 46.6389 63H5.11108C2.28831 63 0 60.3453 0 57.0706V56.4244Z" fill="#023D71"/>
+          </svg>
+          <h2 class="calendar-title">Informações Docentes</h2>
+        </div>
+      </div>
+      
+      <div class="separator-line"></div>
+
+            {% include '_toasts.html' %}
+
+            {% if user and user.tipo and user.tipo|lower in ['admin', 'coordenador'] %}
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+                <a href="{{ url_for('docentes_add') }}" class="btn-add-inline">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Adicionar Docente</span>
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Lista de docentes -->
+            {% if docentes and docentes|length > 0 %}
+                <ul class="docentes-list">
+                    {% for docente in docentes %}
+                        <li class="docente-card">
+                            <a href="{{ url_for('docentes_view', id=docente.id) if docente.id else '#' }}" class="docente-card-link">
+                                <div class="docente-main">
+                                    <div class="docente-title-text">{{ docente.nome_professor }} {{ docente.sobrenome_professor }}</div>
+                                    <div class="docente-info-text">
+                                        {% if docente.email_institucional %}
+                                            {{ docente.email_institucional }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="docente-badges">
+                                    {% if docente.id_funcional %}
+                                        <span class="badge-item">ID: {{ docente.id_funcional }}</span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="empty-state">
+                    <p class="empty-text">Nenhum docente cadastrado.</p>
+                    {% if user and user.tipo and user.tipo|lower in ['admin', 'coordenador'] %}
+                    <a class="btn-add-empty" href="{{ url_for('docentes_add') }}">Adicionar Docente</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+    </div>
+  </main>
+
+</body>
+</html>

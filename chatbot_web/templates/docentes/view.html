@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Informações Docentes - Visualizar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/docentes_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common_buttons.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-main">
+            <div class="header-content">
+                <div class="brand-section">
+                    <a href="{{ url_for('dashboard') }}" style="text-decoration: none;">
+                      <img src="https://api.builder.io/api/v1/image/assets/TEMP/fb4d5eed694b229a53829dcdc98665ec0db0d36c?width=558" alt="UNIP Logo" class="logo">
+                    </a>
+                    <h1 class="site-title">Painel Administrativo</h1>
+                </div>
+                <div class="user-section">
+                    <div class="user-info">
+                        <div class="user-name">{{ session.user.nome|title if session.user else 'Usuário' }}</div>
+                        <div class="user-email">{{ session.user.email if session.user else '' }}</div>
+                    </div>
+                    <a href="{{ url_for('logout') }}" class="btn-logout">sair</a>
+                </div>
+            </div>
+        </div>
+        <div class="header-sub">
+            <div class="menu-toggle">
+                <svg class="menu-icon" width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.9916 6.66419H0.999634M23.9916 0.999512H0.999634M23.9916 12.3289H0.999634M23.9916 17.9936H0.999634" stroke="white" stroke-width="1.9993" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="menu-text">Menu</span>
+                <div class="dropdown-menu">
+                  <a href="{{ url_for('dashboard') }}" class="dropdown-item">Home</a>
+                  <a href="{{ url_for('calendario_list') }}" class="dropdown-item">Calendário</a>
+                  <a href="{{ url_for('conteudo_list') }}" class="dropdown-item">Conteúdo</a>
+                  <a href="{{ url_for('docentes_list') }}" class="dropdown-item">Informações Docentes</a>
+                  <a href="{{ url_for('infos_curso_list') }}" class="dropdown-item">Informações Curso</a>
+                  <a href="{{ url_for('avisos_list') }}" class="dropdown-item">Avisos</a>
+                  <a href="{{ url_for('duvidas_frequentes_list') }}" class="dropdown-item">Dúvidas Frequentes</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="content-card">
+            <div class="card-header">
+                <svg class="header-icon" width="52" height="63" viewBox="0 0 52 63" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M41.4 16.1539C41.4 25.0754 34.4492 32.3077 25.875 32.3077C17.3008 32.3077 10.35 25.0754 10.35 16.1539C10.35 7.23233 17.3008 0 25.875 0C34.4492 0 41.4 7.23233 41.4 16.1539Z" fill="#023D71"/>
+                    <path d="M0 56.4244C0 45.7816 7.437 37.1538 16.611 37.1538H35.139C44.313 37.1538 51.75 45.7816 51.75 56.4244V57.0706C51.75 60.3453 49.4617 63 46.6389 63H5.11108C2.28831 63 0 60.3453 0 57.8206V56.4244Z" fill="#023D71"/>
+                </svg>
+                <h2 class="page-title">Informações Docentes</h2>
+            </div>
+            <div class="separator"></div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="alert-container">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <div class="info-panel">
+                <div class="info-grid">
+                    <div class="info-column">
+                        <div class="form-group">
+                            <label class="field-label">Docente:</label>
+                            <div class="display-field">
+                                <span class="field-value-bold">{{ docente.nome_professor }} {{ docente.sobrenome_professor }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="display-field">
+                                <span class="field-label-inline">Matrícula:</span>
+                                <span class="field-value">{{ docente.id_funcional or 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-column">
+                        <div class="form-group form-group-with-label">
+                            <label class="field-label field-label-spacer">Nível de Acesso:</label>
+                            <div class="display-field">
+                                <span class="field-label-inline">Nível de Acesso:</span>
+                                <span class="field-value">{{ docente.nivel_acesso|title if docente.nivel_acesso else 'Professor' }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="display-field">
+                                <span class="field-label-inline">E-mail:</span>
+                                <span class="field-value">{{ docente.email_institucional or 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-grid" style="margin-top: 2rem;">
+                    <div class="info-column">
+                        <h3 class="section-subtitle">Horário de Atendimento:</h3>
+                        <div class="form-group">
+                            <div class="display-field">
+                                <span class="field-label-inline">Dias da Semana:</span>
+                                <span class="field-value">
+                                    {% if docente.dias_atendimento and docente.dias_atendimento|length > 0 %}
+                                        {{ docente.dias_atendimento|join(', ')|title }}
+                                    {% else %}
+                                        Não informado
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="display-field">
+                                <span class="field-label-inline">Horários:</span>
+                                <span class="field-value">
+                                    {% if docente.atendimento_hora_inicio and docente.atendimento_hora_fim %}
+                                        {{ docente.atendimento_hora_inicio[:5] }}h | {{ docente.atendimento_hora_fim[:5] }}h
+                                    {% elif docente.atendimento_hora_inicio %}
+                                        {{ docente.atendimento_hora_inicio[:5] }}h
+                                    {% else %}
+                                        Não informado
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-column">
+                        <h3 class="section-subtitle">Disciplinas:</h3>
+                        {% if docente.disciplina_nomes and docente.disciplina_nomes|length > 0 %}
+                            {% for disciplina in docente.disciplina_nomes %}
+                            <div class="form-group">
+                                <div class="display-field">
+                                    <span class="field-value field-value-disciplina">{{ disciplina }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="form-group">
+                                <div class="display-field">
+                                    <span class="field-value field-value-disciplina">Nenhuma disciplina associada</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if user and user.tipo and user.tipo|lower in ['admin', 'coordenador'] %}
+                <div class="action-buttons" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <a href="{{ url_for('docentes_edit', id=docente.id) }}" class="btn-edit-info">
+                        <svg class="icon-edit" width="16" height="16" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.375 4.00008C23.7361 3.64989 24.1649 3.3721 24.6367 3.18258C25.1086 2.99305 25.6143 2.89551 26.125 2.89551C26.6357 2.89551 27.1414 2.99305 27.6133 3.18258C28.0851 3.3721 28.5139 3.64989 28.875 4.00008C29.2361 4.35027 29.5226 4.76601 29.7181 5.22355C29.9135 5.6811 30.0141 6.1715 30.0141 6.66674C30.0141 7.16199 29.9135 7.65239 29.7181 8.10993C29.5226 8.56748 29.2361 8.98322 28.875 9.33341L10.3125 27.3334L2.75 29.3334L4.8125 22.0001L23.375 4.00008Z" stroke="#2C8DFA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Editar Informações</span>
+                    </a>
+                    <form method="POST" action="{{ url_for('docentes_delete', id=docente.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover este docente? Esta ação não pode ser desfeita.')">
+                        <button type="submit" class="btn-edit-info btn-delete">
+                            <svg class="icon-edit" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Apagar</span>
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

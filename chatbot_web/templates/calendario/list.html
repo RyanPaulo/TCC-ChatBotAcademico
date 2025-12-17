@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendário</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendario_styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/common_buttons.css') }}">
+  
+  <!-- Sistema de Toasts -->
+  {% include '_toasts.html' %}
+</head>
+<body class="page-body">
+  
+  <header class="page-header">
+    <div class="header-top">
+      <div class="header-brand">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none;">
+          <img class="header-logo" src="https://api.builder.io/api/v1/image/assets/TEMP/fb4d5eed694b229a53829dcdc98665ec0db0d36c?width=558" alt="UNIP">
+        </a>
+        <h1 class="header-title">Painel Administrativo</h1>
+      </div>
+      <div class="header-user">
+        <div class="user-info-panel">
+          <div class="user-name-text">{{ user.nome|title if user and user.nome else '' }}</div>
+          <div class="user-email-text">{{ user.email if user and user.email else '' }}</div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-logout">sair</a>
+      </div>
+    </div>
+    <div class="header-submenu">
+      <div class="submenu-wrapper">
+        <svg class="icon-menu" width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23.9919 6.66468H1M23.9919 1H1M23.9919 12.3294H1M23.9919 17.994H1" stroke="white" stroke-width="1.9993" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="submenu-text">Menu</span>
+        <div class="dropdown-menu">
+          <a href="{{ url_for('dashboard') }}" class="dropdown-item">Home</a>
+          <a href="{{ url_for('calendario_list') }}" class="dropdown-item">Calendário</a>
+          <a href="{{ url_for('conteudo_list') }}" class="dropdown-item">Conteúdo</a>
+          <a href="{{ url_for('docentes_list') }}" class="dropdown-item">Informações Docentes</a>
+          <a href="{{ url_for('infos_curso_list') }}" class="dropdown-item">Informações Curso</a>
+          <a href="{{ url_for('avisos_list') }}" class="dropdown-item">Avisos</a>
+          <a href="{{ url_for('duvidas_frequentes_list') }}" class="dropdown-item">Dúvidas Frequentes</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <div class="container-card">
+      <div class="calendar-header">
+        <div class="calendar-title-wrapper">
+          <svg class="calendar-icon" viewBox="0 0 120 133" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.228394 25.4744C0.228394 23.807 1.5801 22.4553 3.24752 22.4553H9.84888C11.5163 22.4553 12.868 23.807 12.868 25.4744V125.599C12.868 127.266 11.5163 128.618 9.84888 128.618H3.24752C1.5801 128.618 0.228394 127.266 0.228394 125.599V25.4744Z" fill="#3292F9"/>
+            <path d="M24.2438 3.51009C24.2438 1.84268 25.5955 0.490967 27.2629 0.490967H40.1841C41.8515 0.490967 43.2032 1.84267 43.2032 3.51009V23.0973C43.2032 24.7647 41.8515 26.1164 40.1841 26.1164H27.2629C25.5955 26.1164 24.2438 24.7647 24.2438 23.0973V3.51009Z" fill="#3292F9"/>
+            <path d="M76.0662 3.51009C76.0662 1.84268 77.4179 0.490967 79.0853 0.490967H92.0065C93.6739 0.490967 95.0256 1.84267 95.0256 3.51009V23.0973C95.0256 24.7647 93.6739 26.1164 92.0065 26.1164H79.0853C77.4179 26.1164 76.0662 24.7647 76.0662 23.0973V3.51009Z" fill="#3292F9"/>
+            <path d="M24.2438 59.0637H44.4672V76.1473H24.2438V59.0637Z" fill="#3292F9"/>
+            <path d="M24.2438 83.4687H44.4672V100.552H24.2438V83.4687Z" fill="#3292F9"/>
+            <path d="M49.5231 83.4687H69.7464V100.552H49.5231V83.4687Z" fill="#3292F9"/>
+            <path d="M49.5231 59.0637H69.7464V76.1473H49.5231V59.0637Z" fill="#3292F9"/>
+            <path d="M76.0662 59.0637H96.2896V76.1473H76.0662V59.0637Z" fill="#3292F9"/>
+            <path d="M74.8018 83.4687H95.0252V100.552H74.8018V83.4687Z" fill="#3292F9"/>
+            <path d="M3.24751 132.279C1.5801 132.279 0.228394 130.927 0.228394 129.26V119.435C0.228394 117.767 1.5801 116.416 3.24752 116.416H116.022C117.689 116.416 119.041 117.767 119.041 119.435V129.26C119.041 130.927 117.689 132.279 116.022 132.279H3.24751Z" fill="#3292F9"/>
+            <path d="M3.24751 44.4206C1.5801 44.4206 0.228394 43.0689 0.228394 41.4015V23.0345C0.228394 21.3671 1.5801 20.0154 3.24752 20.0154H116.022C117.689 20.0154 119.041 21.3671 119.041 23.0345V41.4015C119.041 43.0689 117.689 44.4206 116.022 44.4206H3.24751Z" fill="#3292F9"/>
+            <path d="M106.401 25.4744C106.401 23.807 107.753 22.4553 109.421 22.4553H116.022C117.689 22.4553 119.041 23.807 119.041 25.4744V125.599C119.041 127.266 117.689 128.618 116.022 128.618H109.421C107.753 128.618 106.401 127.266 106.401 125.599V25.4744Z" fill="#3292F9"/>
+          </svg>
+          <h2 class="calendar-title">Calendário</h2>
+        </div>
+      </div>
+      
+      <div class="separator-line"></div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="messages-area" style="display: none;">
+            {% for category, message in messages %}
+              <div class="message-box message-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% if user and user.tipo and user.tipo|lower in ['admin', 'professor', 'coordenador'] %}
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <a href="{{ url_for('calendario_add') }}" class="btn-add-inline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Adicionar Matéria</span>
+        </a>
+      </div>
+      {% endif %}
+
+      {% if materias %}
+        <ul class="materias-list">
+          {% for m in materias %}
+            <li class="materia-card">
+              <a href="{{ url_for('calendario_view', materia_id=m.id) }}" class="materia-card-link">
+                <div class="materia-main">
+                  <div class="materia-title-text">{{ m.nome }}</div>
+                  <div class="materia-professor-text">{{ m.professor }}</div>
+                </div>
+                <div class="materia-badges">
+                  <span class="badge-item">{{ m.codigo }}</span>
+                  <span class="badge-item">{{ m.carga_horaria }}</span>
+                  <span class="badge-item">{{ m.modalidade }}</span>
+                </div>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="empty-state">
+          <p class="empty-text">Nenhuma matéria cadastrada.</p>
+          {% if user and user.tipo and user.tipo|lower in ['admin', 'professor', 'coordenador'] %}
+          <a class="btn-add-empty" href="{{ url_for('calendario_add') }}">Adicionar Matéria</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </main>
+
+</body>
+</html>

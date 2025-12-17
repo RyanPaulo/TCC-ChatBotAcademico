@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ materia.nome }} - Visualizar Matéria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendario_styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/common_buttons.css') }}">
+  
+  <!-- Sistema de Toasts -->
+  {% include '_toasts.html' %}
+</head>
+<body class="page-body">
+  
+  <header class="page-header">
+    <div class="header-top">
+      <div class="header-brand">
+        <a href="{{ url_for('dashboard') }}" style="text-decoration: none;">
+          <img class="header-logo" src="https://api.builder.io/api/v1/image/assets/TEMP/fb4d5eed694b229a53829dcdc98665ec0db0d36c?width=558" alt="UNIP">
+        </a>
+        <h1 class="header-title">Painel Administrativo</h1>
+      </div>
+      <div class="header-user">
+        <div class="user-info-panel">
+          <div class="user-name-text">{{ user.nome|title if user and user.nome else '' }}</div>
+          <div class="user-email-text">{{ user.email if user and user.email else '' }}</div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-logout">sair</a>
+      </div>
+    </div>
+    <div class="header-submenu">
+      <div class="submenu-wrapper">
+        <svg class="icon-menu" width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23.9919 6.66468H1M23.9919 1H1M23.9919 12.3294H1M23.9919 17.994H1" stroke="white" stroke-width="1.9993" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="submenu-text">Menu</span>
+        <div class="dropdown-menu">
+          <a href="{{ url_for('dashboard') }}" class="dropdown-item">Home</a>
+          <a href="{{ url_for('calendario_list') }}" class="dropdown-item">Calendário</a>
+          <a href="{{ url_for('conteudo_list') }}" class="dropdown-item">Conteúdo</a>
+          <a href="{{ url_for('docentes_list') }}" class="dropdown-item">Informações Docentes</a>
+          <a href="{{ url_for('infos_curso_list') }}" class="dropdown-item">Informações Curso</a>
+          <a href="{{ url_for('avisos_list') }}" class="dropdown-item">Avisos</a>
+          <a href="{{ url_for('duvidas_frequentes_list') }}" class="dropdown-item">Dúvidas Frequentes</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <div class="materia-view-card">
+      
+      <div class="materia-menu-header">
+        <h2 class="materia-view-title">{{ materia.nome }}</h2>
+        <div style="display: flex; gap: 10px;">
+          {% if user and user.tipo and user.tipo|lower in ['admin', 'professor', 'coordenador'] %}
+          <a href="{{ url_for('calendario_edit', materia_id=materia.id) }}" class="btn-edit-info">
+            <svg class="icon-edit" width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.375 4.00008C23.7361 3.64989 24.1649 3.3721 24.6367 3.18258C25.1086 2.99305 25.6143 2.89551 26.125 2.89551C26.6357 2.89551 27.1414 2.99305 27.6133 3.18258C28.0851 3.3721 28.5139 3.64989 28.875 4.00008C29.2361 4.35027 29.5226 4.76601 29.7181 5.22355C29.9135 5.6811 30.0141 6.1715 30.0141 6.66674C30.0141 7.16199 29.9135 7.65239 29.7181 8.10993C29.5226 8.56748 29.2361 8.98322 28.875 9.33341L10.3125 27.3334L2.75 29.3334L4.8125 22.0001L23.375 4.00008Z" stroke="#2C8DFA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Editar Informações</span>
+          </a>
+          <form method="POST" action="{{ url_for('calendario_delete', materia_id=materia.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover esta matéria? Esta ação não pode ser desfeita.')">
+            <button type="submit" class="btn-edit-info" style="background-color: #dc3545; color: white; border: none; cursor: pointer;">
+              <svg class="icon-edit" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Apagar</span>
+            </button>
+          </form>
+          {% endif %}
+        </div>
+        <div class="header-separator"></div>
+      </div>
+
+      <div class="general-info-grid">
+        <div class="info-item">
+          <div class="info-item-label">Cód. Disciplina:</div>
+          <div class="info-item-value">{{ materia.codigo or 'N/A' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-label">Professor:</div>
+          <div class="info-item-value">{{ materia.professor or 'N/A' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-label">Carga Horária:</div>
+          <div class="info-item-value">{{ materia.carga_horaria or 'N/A' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-label">Tipo:</div>
+          <div class="info-item-value">{{ materia.modalidade or 'N/A' }}</div>
+        </div>
+      </div>
+
+      <div class="sections-container">
+        
+        <details class="section-details">
+          <summary class="section-summary">Ementa da Matéria</summary>
+          <div class="section-content ementa-content">
+            <div class="ementa-text-box">
+              <div class="ementa-text-wrapper">
+                <h3 class="ementa-subtitle">Resumo Ementa</h3>
+                <p class="ementa-description">{{ materia.ementa_resumo or 'Nenhum resumo disponível.' }}</p>
+              </div>
+            </div>
+            {% if materia.ementa_arquivo_nome %}
+            <div class="ementa-document-access">
+              <div class="document-label">Acessar Documento:</div>
+              <div class="document-link-wrapper">
+                <svg class="icon-document" width="19" height="25" viewBox="0 0 19 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.625 1H3.125C2.56141 1 2.02091 1.24232 1.6224 1.67365C1.22388 2.10499 1 2.69 1 3.3V21.7C1 22.31 1.22388 22.895 1.6224 23.3263C2.02091 23.7577 2.56141 24 3.125 24H15.875C16.4386 24 16.9791 23.7577 17.3776 23.3263C17.7761 22.895 18 22.31 18 21.7V7.9M11.625 1L18 7.9M11.625 1V7.9H18M13.75 13.65H5.25M13.75 18.25H5.25M7.375 9.05H5.25" stroke="#023D71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <a href="#" class="document-link-text">{{ materia.ementa_arquivo_nome }}</a>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </details>
+
+        <details class="section-details">
+          <summary class="section-summary">Calendário e Horários</summary>
+          <div class="section-content calendario-content">
+            {% if materia.cronogramas and materia.cronogramas|length > 0 %}
+              {% for cronograma in materia.cronogramas %}
+                {% if loop.index > 1 %}
+                  <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;"></div>
+                {% endif %}
+                <div class="calendario-info-row">
+                  <div class="calendario-field">
+                    <span class="calendario-field-label">Dia da semana:</span>
+                    <span class="calendario-field-value">{{ cronograma.dia_semana or 'N/A' }}</span>
+                  </div>
+                  <div class="calendario-field">
+                    <span class="calendario-field-label">Período:</span>
+                    <span class="calendario-field-value">{{ cronograma.tipo_aula or 'N/A' }}</span>
+                  </div>
+                </div>
+                <div class="calendario-info-row">
+                  <div class="calendario-field">
+                    <span class="calendario-field-label">Horário Início:</span>
+                    <span class="calendario-field-value">{{ cronograma.hora_inicio or 'N/A' }}</span>
+                  </div>
+                  <div class="calendario-field">
+                    <span class="calendario-field-label">Horário Fim:</span>
+                    <span class="calendario-field-value">{{ cronograma.hora_fim or 'N/A' }}</span>
+                  </div>
+                </div>
+                <div class="calendario-info-row">
+                  <div class="calendario-field">
+                    <span class="calendario-field-label">Sala:</span>
+                    <span class="calendario-field-value">{{ cronograma.sala or 'N/A' }}</span>
+                  </div>
+                  <div class="calendario-field">
+                    <span class="calendario-field-label">Bloco:</span>
+                    <span class="calendario-field-value">{{ cronograma.bloco or 'N/A' }}</span>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="calendario-info-row">
+                <div class="calendario-field">
+                  <span class="calendario-field-label">Dia da semana:</span>
+                  <span class="calendario-field-value">{{ materia.dia_semana or 'N/A' }}</span>
+                </div>
+                <div class="calendario-field">
+                  <span class="calendario-field-label">Período:</span>
+                  <span class="calendario-field-value">{{ materia.tipo_aula or 'N/A' }}</span>
+                </div>
+              </div>
+              <div class="calendario-info-row">
+                <div class="calendario-field">
+                  <span class="calendario-field-label">Horário Início:</span>
+                  <span class="calendario-field-value">{{ materia.hora_inicio or 'N/A' }}</span>
+                </div>
+                <div class="calendario-field">
+                  <span class="calendario-field-label">Horário Fim:</span>
+                  <span class="calendario-field-value">{{ materia.hora_fim or 'N/A' }}</span>
+                </div>
+              </div>
+              <div class="calendario-info-row">
+                <div class="calendario-field">
+                  <span class="calendario-field-label">Sala:</span>
+                  <span class="calendario-field-value">{{ materia.sala or 'N/A' }}</span>
+                </div>
+                <div class="calendario-field">
+                  <span class="calendario-field-label">Bloco:</span>
+                  <span class="calendario-field-value">{{ materia.bloco or 'N/A' }}</span>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </details>
+
+        <details class="section-details">
+          <summary class="section-summary">Avaliações e Prazos</summary>
+          <div class="section-content avaliacoes-content">
+            
+            {% if materia.provas and materia.provas|length > 0 %}
+              {% for prova_key, prova in materia.provas.items() %}
+                <div class="avaliacao-block">
+                  <h3 class="avaliacao-title">{{ prova_key|upper }}</h3>
+                  <div class="avaliacao-info-row">
+                    <div class="avaliacao-field">
+                      <span class="avaliacao-field-label">Data:</span>
+                      <span class="avaliacao-field-value">{{ prova.data or 'Não informada' }}</span>
+                    </div>
+                    <div class="avaliacao-field">
+                      <span class="avaliacao-field-label">Horário:</span>
+                      <span class="avaliacao-field-value">{{ prova.inicio or 'Não informado' }}</span>
+                    </div>
+                  </div>
+                  <div class="avaliacao-info-row">
+                    <div class="avaliacao-field">
+                      <span class="avaliacao-field-label">Sala:</span>
+                      <span class="avaliacao-field-value">{{ prova.sala or 'Não informada' }}</span>
+                    </div>
+                    <div class="avaliacao-field">
+                      <span class="avaliacao-field-label">Aplicador(a):</span>
+                      <span class="avaliacao-field-value">{{ prova.aplicador or 'Não informado' }}</span>
+                    </div>
+                  </div>
+                  <div class="avaliacao-description">
+                    <div class="avaliacao-description-label">Conteúdo da Prova:</div>
+                    <p class="avaliacao-description-text">{{ prova.conteudo or 'Conteúdo não especificado.' }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p class="empty-message">Nenhuma avaliação cadastrada.</p>
+            {% endif %}
+
+          </div>
+        </details>
+
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

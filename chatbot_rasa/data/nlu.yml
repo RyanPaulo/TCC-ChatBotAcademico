@@ -1,0 +1,873 @@
+version: "3.1"
+
+nlu:
+- intent: saudar
+  examples: |
+    - oi
+    - ola
+    - bom dia
+    - boa tarde
+    - boa noite
+    - e ai
+    - tudo bem
+    - /start
+    - start
+
+- intent: despedir
+  examples: |
+    - tchau
+    - adeus
+    - ate mais
+    - ate logo
+    - preciso ir
+    - encerrar
+    - sair
+
+- intent: agradecer
+  examples: |
+    - obrigado
+    - obrigada
+    - valeu
+    - grato
+    - muito obrigado
+    - ajudou muito
+
+- intent: solicitar_ajuda
+  examples: |
+    - me ajuda
+    - o que voce sabe fazer
+    - quais as funcoes
+    - estou perdido
+    - como usar o bot
+    - lista de comandos
+
+- intent: bot_challenge
+  examples: |
+    - voce e um robo
+    - estou falando com uma pessoa
+    - quem e voce
+
+- intent: consultar_data_avaliacao
+  examples: |
+    - quando e a [NP1]{"entity": "tipo_avaliacao"} de [Qualidade de Software]{"entity": "disciplina"}
+    - quando e a [NP1]{"entity": "tipo_avaliacao"} de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - quando e a [NP1]{"entity": "tipo_avaliacao"} de [Empreendedorismo]{"entity": "disciplina"}
+    - quando e a [NP1]{"entity": "tipo_avaliacao"} de [Compiladores e Computabilidade]{"entity": "disciplina"}
+    - quando e a [NP1]{"entity": "tipo_avaliacao"} de [Orientacao de Estagio]{"entity": "disciplina"}
+    - quando e a [NP1]{"entity": "tipo_avaliacao"} de [Topicos de Atuacao Profissional - CC]{"entity": "disciplina"}
+    - quando e a [NP1]{"entity": "tipo_avaliacao"} de [Trabalho de Curso II]{"entity": "disciplina"}
+    - data da prova de [DSD]{"entity": "disciplina"}
+    - data da prova de [SD]{"entity": "disciplina"}
+    - data da [prova 1]{"entity": "tipo_avaliacao"} de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - data da [prova 2]{"entity": "tipo_avaliacao"} de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - data [prova substitutiva]{"entity": "tipo_avaliacao"} de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - quando e a prova de [DSD]{"entity": "disciplina"}
+    - quando e a prova de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - qual o dia da [avaliacao]{"entity": "tipo_avaliacao"} de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - qual a data da [avaliacao]{"entity": "tipo_avaliacao"} de [Qualidade de Software]{"entity": "disciplina"}
+    - quando e a [avaliacao]{"entity": "tipo_avaliacao"} de [Empreendedorismo]{"entity": "disciplina"}
+    - data da [avaliacao]{"entity": "tipo_avaliacao"} de [Compiladores e Computabilidade]{"entity": "disciplina"}
+    - quando e a [avaliacao]{"entity": "tipo_avaliacao"} de [Orientacao de Estagio]{"entity": "disciplina"}
+    - quais sao as provas que vao ter
+    - quais sao as provas agendadas
+    - lista todas as provas
+    - quais provas estao marcadas
+    - lista de avaliacoes
+    - quais avaliacoes tem
+    - todas as provas
+    - provas marcadas
+    - quando sera a [SUB]{"entity": "tipo_avaliacao"} de [Empreendedorismo]{"entity": "disciplina"}
+    - quando sera a [sub]{"entity": "tipo_avaliacao"} de [Qualidade de Software]{"entity": "disciplina"}
+    - quando sera a [SUB]{"entity": "tipo_avaliacao"} de [Compiladores]{"entity": "disciplina"}
+    - quais provas tenho em [novembro]{"entity": "mes"}
+    - quais provas tenho em [dezembro]{"entity": "mes"}
+    - quais avaliacoes tenho em [outubro]{"entity": "mes"}
+    - provas de [novembro]{"entity": "mes"}
+    - avaliacoes de [dezembro]{"entity": "mes"}
+    - quais provas eu tenho esse semestre
+    - quais avaliacoes eu tenho esse semestre
+    - quantas provas eu tenho esse semestre
+    - quando e a prova de [DSD]{"entity": "disciplina"}
+    - que horas e a [NP1]{"entity": "tipo_avaliacao"}
+    - que horas e a [NP2]{"entity": "tipo_avaliacao"}
+    - que horas e a prova de [DSD]{"entity": "disciplina"}
+    - que horas e a prova de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - qual o horario da [NP1]{"entity": "tipo_avaliacao"} de [Qualidade de Software]{"entity": "disciplina"}
+    - qual o horario da [NP2]{"entity": "tipo_avaliacao"} de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - qual o horario da prova de [DSD]{"entity": "disciplina"}
+    - em que horario e a [NP1]{"entity": "tipo_avaliacao"}
+    - em que horario e a prova
+    - que horas e a prova
+    - qual horario das provas
+    - qual o horario da [SUB]{"entity": "tipo_avaliacao"}
+    - qual o horario do [EXAME]{"entity": "tipo_avaliacao"}
+    - qual o nome do meu curso
+    - qual a carga horaria do curso
+    - qual a carga horaria do meu curso
+    - quantas horas tem o curso
+    - informacoes sobre o curso
+
+- intent: consultar_conteudo_avaliacao
+  examples: |
+    - qual o conteudo da [NP1]{"entity": "tipo_avaliacao"} de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - qual o conteudo da [NP2]{"entity": "tipo_avaliacao"} de [Qualidade de Software]{"entity": "disciplina"}
+    - qual o conteudo da [SUB]{"entity": "tipo_avaliacao"} de [Empreendedorismo]{"entity": "disciplina"}
+    - qual o conteudo do [EXAME]{"entity": "tipo_avaliacao"} de [Compiladores]{"entity": "disciplina"}
+    - qual o conteudo da prova de [DSD]{"entity": "disciplina"}
+    - qual o conteudo da avaliacao de [DSD]{"entity": "disciplina"}
+    - o que cai na [NP1]{"entity": "tipo_avaliacao"} de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - o que cai na [NP2]{"entity": "tipo_avaliacao"} de [Qualidade de Software]{"entity": "disciplina"}
+    - o que cai na prova de [DSD]{"entity": "disciplina"}
+    - o que vai cair na [NP1]{"entity": "tipo_avaliacao"} de [Empreendedorismo]{"entity": "disciplina"}
+    - qual materia cai na [NP2]{"entity": "tipo_avaliacao"} de [Compiladores]{"entity": "disciplina"}
+    - qual o conteudo
+    - o que cai na prova
+    - qual o conteudo da prova
+    - o que vai cair
+    - qual materia cai
+
+- intent: consultar_horario_aula
+  examples: |
+    - que horas e a aula de [DSD]{"entity": "disciplina"}
+    - que horas e a aula de [SD]{"entity": "disciplina"}
+    - qual a sala da aula de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - que dia e a aula de [Qualidade de Software]{"entity": "disciplina"}
+    - horario da aula de [Empreendedorismo]{"entity": "disciplina"}
+    - quando e a aula de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - quando e a aula de [Empreendedorismo]{"entity": "disciplina"}
+    - quando e a aula de [Orientacao de Estagio]{"entity": "disciplina"}
+    - quando e a aula de [Topicos de Atuacao Profissional]{"entity": "disciplina"}
+    - quando e a aula de [Compiladores e Computabilidade]{"entity": "disciplina"}
+    - qual o horario de [Qualidade de Software]{"entity": "disciplina"}
+    - que horas comeca [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - que horas e a aula de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - qual a sala da aula de [Qualidade de Software]{"entity": "disciplina"}
+    - quando e a aula de [qualidade de software]{"entity": "disciplina"}
+    - horario de [DSD]{"entity": "disciplina"}
+    - que horas comeca a aula de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - que horas e a aula de [empreendedorismo]{"entity": "disciplina"}
+    - qual o horario de [empreendedorismo]{"entity": "disciplina"}
+    - que horas e a aula de [compiladores]{"entity": "disciplina"}
+    - quando tenho aula de [DSD]{"entity": "disciplina"}
+    - quando eu tenho aula de [DSD]{"entity": "disciplina"}
+    - qual o horario de [DSD]{"entity": "disciplina"}
+    - qual horario de [DSD]{"entity": "disciplina"}
+    - quando e a aula de [DSD]{"entity": "disciplina"}
+    - que horas e a aula de [DSD]{"entity": "disciplina"}
+    - qual o horario da aula de [DSD]{"entity": "disciplina"}
+    - que dia e a aula de [DSD]{"entity": "disciplina"}
+    - qual a sala da aula de [DSD]{"entity": "disciplina"}
+    - em qual horario
+    - qual o horario
+    - que horas
+
+- intent: consultar_regras_aps
+  examples: |
+    - qual o prazo da [APS]{"entity": "atividade_academica"}
+    - como entregar a [aps]{"entity": "atividade_academica"}
+    - qual a data de entrega da [aps]{"entity": "atividade_academica"}
+    - o que e [APS]{"entity": "atividade_academica"}
+    - informacoes sobre [APS]{"entity": "atividade_academica"}
+    - informacoes sobre [Atividades Praticas Supervisionadas]{"entity": "atividade_academica"}
+    - regras da [aps]{"entity": "atividade_academica"}
+    - regras do [APS]{"entity": "atividade_academica"}
+    - como funciona a [aps]{"entity": "atividade_academica"}
+    - preciso de informacoes sobre [APS]{"entity": "atividade_academica"}
+    - tem documento de [APS]{"entity": "atividade_academica"}
+    - quero baixar documento de [aps]{"entity": "atividade_academica"}
+    - tem algum documento sobre [APS]{"entity": "atividade_academica"}
+    - preciso do documento de [aps]{"entity": "atividade_academica"}
+    - quero o documento de [APS]{"entity": "atividade_academica"}
+    - me manda o documento de [aps]{"entity": "atividade_academica"}
+    - onde baixo o documento de [APS]{"entity": "atividade_academica"}
+    - tem doc de [aps]{"entity": "atividade_academica"}
+    - quero baixar doc de [APS]{"entity": "atividade_academica"}
+
+- intent: consultar_regras_tcc
+  examples: |
+    - data da banca de [TCC]{"entity": "atividade_academica"}
+    - qual o prazo final do [tcc]{"entity": "atividade_academica"}
+    - o que e [TCC]{"entity": "atividade_academica"}
+    - informacoes sobre [TCC]{"entity": "atividade_academica"}
+    - informacoes sobre [Trabalho de Conclusao de Curso]{"entity": "atividade_academica"}
+    - regras do [tcc]{"entity": "atividade_academica"}
+    - regras do [TCC]{"entity": "atividade_academica"}
+    - quando comeca o [tcc]{"entity": "atividade_academica"}
+    - quando comeca o [TCC]{"entity": "atividade_academica"}
+    - data de entrega do [tcc]{"entity": "atividade_academica"}
+    - preciso de informacoes sobre [TCC]{"entity": "atividade_academica"}
+    - tem documento de [TCC]{"entity": "atividade_academica"}
+    - quero baixar documento de [tcc]{"entity": "atividade_academica"}
+    - tem algum documento sobre [TCC]{"entity": "atividade_academica"}
+    - preciso do documento de [tcc]{"entity": "atividade_academica"}
+    - quero o documento de [TCC]{"entity": "atividade_academica"}
+    - me manda o documento de [tcc]{"entity": "atividade_academica"}
+    - onde baixo o documento de [TCC]{"entity": "atividade_academica"}
+    - tem doc de [tcc]{"entity": "atividade_academica"}
+    - quero baixar doc de [TCC]{"entity": "atividade_academica"}
+
+- intent: consultar_estagio
+  examples: |
+    - como valido meu [estagio]{"entity": "atividade_academica"}
+    - quantas horas de [estagio]{"entity": "atividade_academica"} preciso
+    - informacoes sobre [estagio]{"entity": "atividade_academica"}
+    - informacoes sobre [estagio]{"entity": "atividade_academica"}
+    - regras de [estagio]{"entity": "atividade_academica"}
+    - regras do [estagio]{"entity": "atividade_academica"}
+    - preciso de informacoes sobre [estagio]{"entity": "atividade_academica"}
+    - tem documento de [estagio]{"entity": "atividade_academica"}
+    - quero baixar documento de [estagio]{"entity": "atividade_academica"}
+    - tem algum documento sobre [estagio]{"entity": "atividade_academica"}
+    - preciso do documento de [estagio]{"entity": "atividade_academica"}
+    - quero o documento de [estagio]{"entity": "atividade_academica"}
+    - me manda o documento de [estagio]{"entity": "atividade_academica"}
+    - onde baixo o documento de [estagio]{"entity": "atividade_academica"}
+    - tem doc de [estagio]{"entity": "atividade_academica"}
+    - quero baixar doc de [estagio]{"entity": "atividade_academica"}
+
+- intent: consultar_horas_complementares
+  examples: |
+    - como entregar [horas complementares]{"entity": "atividade_academica"}
+    - quantas [horas]{"entity": "atividade_academica"} eu tenho
+    - informacoes sobre [horas complementares]{"entity": "atividade_academica"}
+    - informacoes sobre [Horas Complementares]{"entity": "atividade_academica"}
+    - regras de [horas complementares]{"entity": "atividade_academica"}
+    - preciso de informacoes sobre [horas complementares]{"entity": "atividade_academica"}
+    - tem documento de [horas complementares]{"entity": "atividade_academica"}
+    - quero baixar documento de [horas complementares]{"entity": "atividade_academica"}
+    - tem algum documento sobre [horas complementares]{"entity": "atividade_academica"}
+    - preciso do documento de [horas complementares]{"entity": "atividade_academica"}
+    - quero o documento de [horas complementares]{"entity": "atividade_academica"}
+    - me manda o documento de [horas complementares]{"entity": "atividade_academica"}
+    - onde baixo o documento de [horas complementares]{"entity": "atividade_academica"}
+
+- intent: solicitar_info_docente
+  examples: |
+    - qual o email do professor [Zezinho]{"entity": "nome_docente"}
+    - qual o email da coordenadora [Eliane]{"entity": "nome_docente"}
+    - preciso do contato do [Alvaro]{"entity": "nome_docente"}
+    - email da [Myriam]{"entity": "nome_docente"}
+    - email do [Hugo]{"entity": "nome_docente"}
+    - email do professor [Magrini]{"entity": "nome_docente"}
+    - contato do professor [Zezinho]{"entity": "nome_docente"}
+    - me passa o email do [Alvaro]{"entity": "nome_docente"}
+    - qual o contato da [Eliane]{"entity": "nome_docente"}
+    - qual o email do [Alvaro]{"entity": "nome_docente"}
+    - preciso do email da [Eliane]{"entity": "nome_docente"}
+    - qual o email da [Myriam]{"entity": "nome_docente"}
+    - email do coordenador
+    - email da coordenacao
+    - contato do coordenador
+    - qual o email do coordenador
+    - preciso do email do professor [Luiz Magrini]{"entity": "nome_docente"}
+    - qual o email da coordenadora [Eliane Santiago]{"entity": "nome_docente"}
+
+- intent: solicitar_atendimento_docente
+  examples: |
+    - qual o horario de atendimento do [Zezinho]{"entity": "nome_docente"}
+    - quando a [Eliane]{"entity": "nome_docente"} esta na faculdade
+    - quando posso falar com a [Eliane]{"entity": "nome_docente"}
+    - quando eu posso falar com o professor [Alvaro]{"entity": "nome_docente"}
+    - quando posso falar com a coordenadora [Eliane]{"entity": "nome_docente"}
+    - quando posso falar com o [Alvaro]{"entity": "nome_docente"}
+    - quando posso falar com a [Myriam]{"entity": "nome_docente"}
+    - quando posso falar com o professor [Luiz Magrini]{"entity": "nome_docente"}
+    - quando posso falar com a coordenacao
+    - a professora [Myriam]{"entity": "nome_docente"} atende hoje
+    - atendimento da coordenacao
+    - qual o horario da [Myriam]{"entity": "nome_docente"}?
+    - horario de atendimento do [alvaro]{"entity": "nome_docente"}
+    - quando encontro o [alvaro]{"entity": "nome_docente"}?
+    - qual o horario do professor [alvaro]{"entity": "nome_docente"}?
+    - horario [alvaro]{"entity": "nome_docente"}
+    - qual horario de atendimento do [alvaro]{"entity": "nome_docente"}
+    - quando a [eliane]{"entity": "nome_docente"} esta na faculdade
+    - quando a coordenadora [Eliane]{"entity": "nome_docente"} esta disponivel
+    - atendimento [coordenacao]{"entity": "nome_docente"}
+    - horario de atendimento da [coordenacao]{"entity": "nome_docente"}
+    - quando o professor [Luiz Magrini]{"entity": "nome_docente"} esta na faculdade
+    - quais sao os horarios de atendimento do [Miryam]{"entity": "nome_docente"}
+    - quando o [Magrini]{"entity": "nome_docente"} esta na faculdade
+    - qual o horario do [Alvaro]{"entity": "nome_docente"}
+    - quando o professor [Alvaro]{"entity": "nome_docente"} esta na faculdade
+    - quais sao os horarios de atendimento
+    - quando os professores estao na faculdade
+    - quando o professor [Luiz]{"entity": "nome_docente"} esta na faculdade
+    - quando a professora [Miryam Moraes]{"entity": "nome_docente"} esta na faculdade
+    - qual o horario de atendimento da [Eliane Santiago]{"entity": "nome_docente"}
+    - quando o [Alvaro Prado]{"entity": "nome_docente"} esta disponivel
+    - horario de atendimento do professor [Hugo]{"entity": "nome_docente"}
+    - quando encontro a [coordenacao]{"entity": "nome_docente"}
+    - quais os horarios de atendimento do coordenador
+    - quando a coordenadora esta disponivel
+    - quando posso encontrar a coordenadora [Eliane]{"entity": "nome_docente"}
+
+- intent: consultar_ementa
+  examples: |
+    - qual ementa de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - qual ementa da disciplina [Qualidade de Software]{"entity": "disciplina"}
+    - o que vamos aprender em [Empreendedorismo]{"entity": "disciplina"}
+    - qual o conteudo de [Qualidade de Software]{"entity": "disciplina"}
+    - qual a ementa de [Empreendedorismo]{"entity": "disciplina"}
+    - qual a ementa da [Compiladores]{"entity": "disciplina"}
+    - o que e ensinado em [Topicos de Atuacao Profissional - CC]{"entity": "disciplina"}
+    - qual o conteudo programatico de [DSD]{"entity": "disciplina"}
+    - o que vou estudar em [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - qual o programa da disciplina [Qualidade de Software]{"entity": "disciplina"}
+    - conteudo de [Empreendedorismo]{"entity": "disciplina"}
+    - ementa de [Qualidade de Software]{"entity": "disciplina"}
+    - o que tem na ementa de [Empreendedorismo]{"entity": "disciplina"}
+    - qual o conteudo da materia [Compiladores e Computabilidade]{"entity": "disciplina"}
+    - o que e abordado em [Topicos de Atuacao Profissional - CC]{"entity": "disciplina"}
+    - qual ementa
+    - qual o conteudo
+    - o que vamos aprender
+    - qual a ementa
+
+- intent: perguntar_conteudo_ia
+  examples: |
+    - o que e [diagrama de classes]{"entity": "topico_estudo"}
+    - me explica [COCOMO]{"entity": "topico_estudo"}
+    - o que significa [UML]{"entity": "topico_estudo"}
+    - definicao de [scrum]{"entity": "topico_estudo"}
+    - o que e [PaaS]{"entity": "topico_estudo"}
+    - o que e [Cloud Computing]{"entity": "topico_estudo"}
+    - o que e [cocomo 81]{"entity": "topico_estudo"}
+
+- intent: solicitar_material_aula
+  examples: |
+    - disponibiliza os slides de [DSD]{"entity": "disciplina"}
+    - disponibiliza os slides de [SD]{"entity": "disciplina"}
+    - quero baixar o pdf da aula de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - tem material complementar de [Qualidade de Software]{"entity": "disciplina"}
+    - onde baixo os arquivos da aula
+    - onde baixa os arquivos da aula
+    - onde baixar os arquivos da aula
+    - vc consegue me mandar esse material?
+    - pode me enviar o material de [Empreendedorismo]{"entity": "disciplina"}?
+    - me manda o pdf sobre [cocomo]{"entity": "topico_estudo"}
+    - me manda o material de [Compiladores e Computabilidade]{"entity": "disciplina"}
+    - me mande material de [Qualidade de Software]{"entity": "disciplina"}
+    - quero o material de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - preciso dos slides da aula de [DSD]{"entity": "disciplina"}
+    - tem pdf de [Empreendedorismo]{"entity": "disciplina"}?
+    - quero baixar material de [Orientacao de Estagio]{"entity": "disciplina"}
+    - disponibilize os slides de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - disponilize slides de [DSD]{"entity": "disciplina"}
+    - preciso do material de [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - quero os slides de [DSD]{"entity": "disciplina"}
+
+- intent: consultar_aviso
+  examples: |
+    - tem algum aviso novo
+    - a aula foi cancelada
+    - recados do professor
+    - ultimos avisos da coordenacao
+    - quais sao os avisos mais recentes
+    - me lista os avisos
+    - ver recados
+    - algum comunicado importante?
+
+- intent: informar_disciplina
+  examples: |
+    - [Topicos de Atuacao Profissional - CC]{"entity": "disciplina"}
+    - [Qualidade de Software]{"entity": "disciplina"}
+    - [Desenvolvimento de Sistemas Distribuido]{"entity": "disciplina"}
+    - a materia [DSD]{"entity": "disciplina"}
+    - [DSD]{"entity": "disciplina"}
+    - [SD]{"entity": "disciplina"}
+    - [Empreendedorismo]{"entity": "disciplina"}
+    - [Compiladores e Computabilidade]{"entity": "disciplina"}
+    - [Compiladores]{"entity": "disciplina"}
+    - [Orientacao de Estagio]{"entity": "disciplina"}
+    - [Topicos de Atuacao Profissional - CC]{"entity": "disciplina"}
+    - [Trabalho de Curso II]{"entity": "disciplina"}
+    - [Atividades Complementares]{"entity": "disciplina"}
+
+- intent: consultar_quantidade_materias
+  examples: |
+    - quantas materias tenho esse semestre
+    - quantas disciplinas tenho esse semestre
+    - quantas materias eu tenho
+    - quantas disciplinas eu tenho
+    - quantas materias estou cursando
+    - quantas disciplinas estou cursando
+
+- intent: listar_disciplinas
+  examples: |
+    - quais materias eu tenho esse semestre
+    - quais sao minhas disciplinas
+    - quais sao minhas materias esse semestre
+    - quais disciplinas eu tenho esse semestre
+    - quais materias estou cursando
+    - quais disciplinas estou cursando
+    - lista minhas materias
+    - lista minhas disciplinas
+    - quais sao as materias que eu tenho
+    - quais sao as disciplinas que eu tenho
+    - me mostre minhas materias
+    - me mostre minhas disciplinas
+    - quais materias eu curso
+    - quais disciplinas eu curso
+    - lista todas as minhas materias
+    - lista todas as minhas disciplinas
+    - quais sao as disciplinas que eu tenho esse semestre
+    - quais sao as materias que eu tenho esse semestre
+    - quais disciplinas eu tenho
+    - quais materias eu tenho
+    - minhas disciplinas
+    - minhas materias
+    - lista de disciplinas
+    - lista de materias
+    - quais sao as disciplinas do semestre
+    - quais sao as materias do semestre
+
+- intent: consultar_info_curso
+  examples: |
+    - qual o nome do meu curso
+    - qual a carga horaria do curso
+    - qual a carga horaria do meu curso
+    - quantas horas tem o curso
+    - informacoes sobre o curso
+    - dados do curso
+    - qual curso estou fazendo
+    - qual o curso que estou fazendo
+    - qual curso eu estou fazendo
+    - qual e o meu curso
+    - qual e o curso
+    - me fale sobre o meu curso
+    - informacoes do meu curso
+    - detalhes do curso
+    - qual a modalidade do curso
+    - qual a formacao do curso
+    - qual o periodo do curso
+    - qual a descricao do curso
+    - o que e o meu curso
+    - me explique sobre o curso
+    - conte-me sobre o curso
+    - quais sao as informacoes do curso
+    - preciso saber sobre o curso
+    - quero saber sobre o curso
+
+# INTENT REMOVIDO
+# - intent: consultar_duvidas_frequentes
+#   examples: |
+#     - quais sao as duvidas mais frequentes
+#     - o que os alunos mais perguntam
+#     - duvidas frequentes
+#     - categorias mais perguntadas
+#     - quais sao os topicos mais consultados
+#     - o que e mais perguntado
+#     - quais sao as perguntas mais comuns
+#     - duvidas mais frequentes dos alunos
+
+- intent: consultar_quantidade_alunos_turma
+  examples: |
+    - quantos alunos tem na minha turma
+    - quantos alunos tem na turma
+    - quantos alunos tem na minha sala
+    - quantos colegas tem na minha turma
+    - quantos alunos estudam comigo
+    - quantas pessoas tem na minha turma
+    - quantos alunos tem na turma que eu estudo
+    - qual a quantidade de alunos na minha turma
+
+- intent: consultar_provas_por_mes
+  examples: |
+    - quais provas tem em [novembro]{"entity": "mes"}
+    - quais provas tem em [dezembro]{"entity": "mes"}
+    - quais provas tem em [outubro]{"entity": "mes"}
+    - quais provas tem em [setembro]{"entity": "mes"}
+    - quais provas tem em [agosto]{"entity": "mes"}
+    - quais provas tem em [julho]{"entity": "mes"}
+    - quais provas tem em [junho]{"entity": "mes"}
+    - quais provas tem em [maio]{"entity": "mes"}
+    - quais provas tem em [abril]{"entity": "mes"}
+    - quais provas tem em [marco]{"entity": "mes"}
+    - quais provas tem em [fevereiro]{"entity": "mes"}
+    - quais provas tem em [janeiro]{"entity": "mes"}
+    - provas de [novembro]{"entity": "mes"}
+    - provas de [dezembro]{"entity": "mes"}
+    - provas de [outubro]{"entity": "mes"}
+    - provas em [novembro]{"entity": "mes"}
+    - provas em [dezembro]{"entity": "mes"}
+    - provas em [outubro]{"entity": "mes"}
+    - que provas tem em [novembro]{"entity": "mes"}
+    - que provas tem em [dezembro]{"entity": "mes"}
+    - que provas tem em [outubro]{"entity": "mes"}
+    - quais avaliacoes tem em [novembro]{"entity": "mes"}
+    - quais avaliacoes tem em [dezembro]{"entity": "mes"}
+    - quais avaliacoes tem em [outubro]{"entity": "mes"}
+    - avaliacoes de [novembro]{"entity": "mes"}
+    - avaliacoes de [dezembro]{"entity": "mes"}
+    - avaliacoes de [outubro]{"entity": "mes"}
+
+
+#================================================================
+# DICIONÁRIOS (Lookup Tables)
+#================================================================
+
+- lookup: disciplina
+  examples: |
+    - Atividades Complementares
+    - Tópicos de Atuação Profissional - CC
+    - Topicos de Atuacao Profissional - CC
+    - Orientação de Estágio
+    - Orientacao de Estagio
+    - Trabalho de Curso II
+    - Desenvolvimento de Sistemas Distribuído
+    - Desenvolvimento de Sistemas Distribuidos
+    - Empreendedorismo
+    - Qualidade de Software
+    - Compiladores e Computabilidade
+
+
+- lookup: tipo_avaliacao
+  examples: |
+    - NP1
+    - NP2
+    - np1
+    - np2
+    - exame
+    - substitutiva
+    - sub
+    - avaliacao
+    - avaliação
+    - prova
+    - provas
+
+- lookup: nome_docente
+  examples: |
+    - Myriam Moraes
+    - Myriam
+    - Álvaro Prado
+    - Alvaro
+    - Álvaro
+    - Luiz Magrini
+    - Magrini
+    - Arthur Battaglia
+    - Hugo Insua
+    - Luiz Gobitta
+    - Saulo
+    - Eliane Santiago
+    - Eliane
+
+- lookup: atividade_academica
+  examples: |
+    - horas complementares
+    - estágio
+    - regras do estágio
+    - carga horária do estágio
+    - TCC
+    - entrega do TCC
+    - regras do TCC
+    - APS
+    - entrega da APS
+    - manual da APS
+
+- lookup: tipo_material
+  examples: |
+    - slides
+    - slide
+    - artigo
+    - pdf
+    - vídeo
+    - leitura
+    - leituras recomendadas
+    - link
+
+- lookup: info_docente
+  examples: |
+    - horário de atendimento
+    - email
+    - e-mail
+    - sala
+    - contato
+
+- lookup: prazo_tipo
+  examples: |
+    - entrega
+    - inscrição
+    - prazo final
+    - entrega da APS
+    - entrega do TCC
+    - entrega do trabalho
+
+- lookup: mes
+  examples: |
+    - janeiro
+    - fevereiro
+    - marco
+    - março
+    - abril
+    - maio
+    - junho
+    - julho
+    - agosto
+    - setembro
+    - outubro
+    - novembro
+    - dezembro
+
+#================================================================
+# SINÔNIMOS (Apelidos)
+#================================================================
+
+# --- COORDENADORA: Eliane Santiago ---
+- synonym: Eliane Santiago
+  examples: |
+    - Eliane
+    - prof Eliane
+    - Professora Eliane
+    - coordenadora
+    - coordenadora do curso
+    - coordenação
+    - coordenadora Eliane
+
+# --- DISCIPLINA: Desenvolvimento de Sistemas Distribuído ---
+- synonym: Desenvolvimento de Sistemas Distribuído
+  examples: |
+    - DSD
+    - dsd
+    - SD
+    - sd
+    - sistemas distribuidos
+    - distribuidos
+    - Desenvolvimento de Sistemas Distribuidos
+    - desenvolvimento de sistemas distribuido
+
+# --- DISCIPLINA: Qualidade de Software ---
+- synonym: Qualidade de Software
+  examples: |
+    - QS
+    - qs
+    - qualidade de software
+    - qualidade
+
+# --- DISCIPLINA: Empreendedorismo ---
+- synonym: Empreendedorismo
+  examples: |
+    - empreendedorismo
+    - Empreendedorismo
+
+# --- DISCIPLINA: Orientação de Estágio ---
+- synonym: Orientação de Estágio
+  examples: |
+    - Orientacao de Estagio
+    - orientacao de estagio
+    - Orientacao de Estagio
+    - estagio
+    - orientacao
+
+# --- DISCIPLINA: Tópicos de Atuação Profissional - CC ---
+- synonym: Tópicos de Atuação Profissional - CC
+  examples: |
+    - Topicos de Atuacao Profissional - CC
+    - Topicos de Atuacao Profissional
+    - topicos de atuacao profissional
+    - topicos
+    - TAP
+    - tap
+
+# --- DISCIPLINA: Trabalho de Curso II ---
+- synonym: Trabalho de Curso II
+  examples: |
+    - TC2
+    - tc2
+    - TC 2
+    - tc 2
+    - TCC
+    - tcc
+    - Trabalho de Curso
+    - trabalho de curso
+
+# --- DISCIPLINA: Atividades Complementares ---
+- synonym: Atividades Complementares
+  examples: |
+    - atividades complementares
+    - Atividades Complementares
+    - horas complementares
+    - Horas Complementares
+
+# --- DISCIPLINA: Compiladores e Computabilidade ---
+- synonym: Compiladores e Computabilidade
+  examples: |
+    - compiladores
+    - Compiladores
+    - compiladores e computabilidade
+    - CC
+    - cc
+
+# --- PROFESSOR: Álvaro Prado ---
+- synonym: Álvaro Prado
+  examples: |
+    - Alvaro
+    - prof Alvaro
+    - Professor Álvaro
+    - Alvaro Prado
+
+# --- PROFESSOR: Luiz Magrini ---
+- synonym: Luiz Magrini
+  examples: |
+    - Magrini
+    - Luiz
+    - prof Magrini
+    - Professor Magrini
+    - Luiz Magrini
+
+# --- PROFESSOR: Miryam Moraes ---
+- synonym: Miryam Moraes
+  examples: |
+    - Myriam
+    - Miryam
+    - Myriam Moraes
+    - prof Myriam
+    - Professora Myriam
+
+# --- PROFESSOR: Arthur Battaglia ---
+- synonym: Arthur Battaglia
+  examples: |
+    - Arthur
+    - Battaglia
+    - prof Arthur
+    - Professor Arthur
+
+# --- PROFESSOR: Hugo Insua ---
+- synonym: Hugo Insua
+  examples: |
+    - Hugo
+    - Insua
+    - prof Hugo
+
+# --- AVALIAÇÃO: APS ---
+- synonym: APS
+  examples: |
+    - aps
+    - Atividades Práticas Supervisionadas
+    - entrega da aps
+
+# --- AVALIAÇÃO: TCC ---
+- synonym: TCC
+  examples: |
+    - tcc
+    - Trabalho de Conclusão de Curso
+    - entrega do tcc
+
+# --- AVALIAÇÃO: NP1 / NP2 ---
+- synonym: NP1
+  examples: |
+    - np1
+    - Np1
+    - prova 1
+    - prova primeiro período
+    - primeira prova
+    - P1
+    - p1
+
+- synonym: NP2
+  examples: |
+    - np2
+    - Np2
+    - prova 2
+    - prova segundo período
+    - segunda prova
+    - P2
+    - p2
+
+# --- AUTENTICAÇÃO: INFORMAR EMAIL ---
+- intent: informar_email
+  examples: |
+    - [fulano@aluno.unip.br]{"entity": "email_institucional"}
+    - [joao.silva@aluno.unip.br]{"entity": "email_institucional"}
+    - [maria.santos@aluno.unip.br]{"entity": "email_institucional"}
+    - meu email e [pedro@aluno.unip.br]{"entity": "email_institucional"}
+    - [carlos.oliveira@aluno.unip.br]{"entity": "email_institucional"}
+    - [ana.costa@aluno.unip.br]{"entity": "email_institucional"}
+    - [lucas@aluno.unip.br]{"entity": "email_institucional"}
+    - [julia@aluno.unip.br]{"entity": "email_institucional"}
+    - [rafael@aluno.unip.br]{"entity": "email_institucional"}
+    - [fernanda@aluno.unip.br]{"entity": "email_institucional"}
+
+# --- AUTENTICAÇÃO: INFORMAR DÍGITO DO RA ---
+- intent: informar_digito_ra
+  examples: |
+    - 5
+    - o quinto digito e 3
+    - 7
+    - 1
+    - 9
+    - 2
+    - 4
+    - 6
+    - 8
+    - 1234
+    - 123456
+    - os primeiros sao 1234
+    - 567
+    - os ultimos sao 890
+    - 1234567890
+    - meu ra e 1234567890
+    - 12 34 56
+    - um dois tres quatro
+    - 0
+    - e 5
+    - digito 5
+    - quinto digito e 3
+    - J
+    - j
+    - F
+    - f
+    - A
+    - a
+    - B
+    - b
+    - C
+    - c
+    - D
+    - d
+    - E
+    - e
+    - G
+    - g
+    - H
+    - h
+    - I
+    - i
+    - K
+    - k
+    - L
+    - l
+    - M
+    - m
+    - N
+    - n
+    - O
+    - o
+    - P
+    - p
+    - Q
+    - q
+    - R
+    - r
+    - S
+    - s
+    - T
+    - t
+    - U
+    - u
+    - V
+    - v
+    - W
+    - w
+    - X
+    - x
+    - Y
+    - y
+    - Z
+    - z
+    - e J
+    - digito J
+    - quinto digito e J
+    - letra J
+    - e F
+    - digito F

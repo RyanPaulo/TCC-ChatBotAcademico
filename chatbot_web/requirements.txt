@@ -1,0 +1,10 @@
+# Framework Web
+Flask==3.0.0
+
+# Cliente HTTP para comunicação com a API
+requests==2.31.0
+
+# Carregamento de variáveis de ambiente do arquivo .env
+python-dotenv==1.0.0
+
+
