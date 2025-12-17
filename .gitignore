@@ -1,15 +1,8 @@
 # ============================================
 # TCC-CHATBOTACADEMICO - .gitignore Unificado
 # ============================================
-# Este arquivo unifica os .gitignore de:
-# - chatbot_api
-# - chatbot_rasa  
-# - chatbot_web
-#
-# NOTA: Padrões sem barra inicial (/) funcionam recursivamente em todas
-# as subpastas. Exemplo: .venv/ ignora .venv/ na raiz E em qualquer subpasta.
-# Os padrões explícitos abaixo são redundantes mas garantem cobertura total.
-# ============================================
+
+
 
 # ============================================
 # AMBIENTES VIRTUAIS PYTHON
@@ -213,25 +206,7 @@ __pycache__/
 *.pptx
 *.ppt
 
-# ============================================
-# DOCUMENTAÇÃO E MARKDOWN
-# ============================================
-# Ignora todos os .md exceto README.md
-*.md
-!README.md
-README*.md
-!README*.md
-*.md.bak
-CHATBOT_AUTH_EXAMPLES.md
-CORRECAO_SESSAO_AUTENTICACAO.md
-CORRECOES_AUTENTICACAO.md
-GUIA_COMANDOS.md
-IMPLEMENTACAO_AUTENTICACAO.md
-PROMPT_AUTH_RASA.md
-COMO_CONFIGURAR_ENV.txt
-*_CONFIGURACAO*.txt
-*_GUIA*.txt
-*_INSTRUCOES*.txt
+
 
 # ============================================
 # FLASK E APLICAÇÕES WEB
