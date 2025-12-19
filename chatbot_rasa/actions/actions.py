@@ -21,9 +21,8 @@ if platform.system() == "Windows":
 
 API_URL = "http://localhost:8000"
 
-# ===================================================================
-# CONFIGURAÇÃO DE LOGGING
-# ===================================================================
+
+### CONFIGURAÇÃO DE LOGGING ###
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -34,7 +33,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# VERIFICAÇÃO DE TOKEN DE AUTENTICAÇÃO
+### VERIFICAÇÃO DE TOKEN DE AUTENTICAÇÃO ###
+### FUNÇÃO PARA VERIFICAR SE O TOKEN DE AUTENTICAÇÃO É VÁLIDO ###
 def verificar_token_valido(access_token: str) -> bool:
     """
     Verifica se o token de autenticação ainda é válido.
@@ -75,6 +75,7 @@ def verificar_token_valido(access_token: str) -> bool:
         # Em caso de erro, assumir que o token pode ser válido (não bloquear)
         return True
 
+### FUNÇÃO PARA OBTER HEADERS DE AUTENTICAÇÃO ###
 def get_auth_headers(tracker: Tracker, verificar_validade: bool = True) -> dict:
     """
     Retorna headers HTTP com token de autenticação se disponível e válido.
@@ -108,6 +109,7 @@ def get_auth_headers(tracker: Tracker, verificar_validade: bool = True) -> dict:
     
     return headers
 
+### FUNÇÃO PARA VERIFICAR E ATUALIZAR INATIVIDADE ###
 def verificar_e_atualizar_inatividade(tracker: Tracker, dispatcher: CollectingDispatcher) -> tuple[bool, List[Dict[Text, Any]]]:
     """
     Verifica inatividade e atualiza timestamp se usuário estiver ativo.
@@ -173,6 +175,7 @@ def verificar_e_atualizar_inatividade(tracker: Tracker, dispatcher: CollectingDi
         timestamp_atual = datetime.now().isoformat()
         return (True, [SlotSet("ultima_atividade_timestamp", timestamp_atual)])
 
+### FUNÇÃO PARA VERIFICAR AUTENTICAÇÃO COMPLETA ###
 def verificar_autenticacao_completa(tracker: Tracker) -> tuple[bool, Optional[str]]:
     """
     Verifica se o usuário está completamente autenticado e o token é válido.
@@ -198,6 +201,7 @@ def verificar_autenticacao_completa(tracker: Tracker) -> tuple[bool, Optional[st
     
     return (True, access_token)
 
+### FUNÇÃO PARA ATUALIZAR TIMESTAMP DA ÚLTIMA ATIVIDADE ###
 def atualizar_timestamp_atividade() -> List[Dict[Text, Any]]:
     """
     Helper para atualizar o timestamp da última atividade do usuário.
@@ -206,9 +210,8 @@ def atualizar_timestamp_atividade() -> List[Dict[Text, Any]]:
     timestamp_atual = datetime.now().isoformat()
     return [SlotSet("ultima_atividade_timestamp", timestamp_atual)]
 
-# ===================================================================
-# HELPER PARA DELETAR MENSAGENS DO TELEGRAM
-# ===================================================================
+
+### HELPER PARA DELETAR MENSAGENS DO TELEGRAM ###
 TELEGRAM_BOT_TOKEN = "8309691579:AAED-SjbFO6WcjOO75muLKt-_kaPwnTSyog"  # Do credentials.yml
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 
@@ -216,12 +219,13 @@ TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 _threads_digitando = {}
 _lock_threads = threading.Lock()
 
+### FUNÇÃO PARA ENVIAR INDICADOR DE DIGITANDO ###
 def enviar_indicador_digitando(chat_id: str) -> bool:
     """
     Envia o indicador de "digitando..." no Telegram.
     
     Args:
-        chat_id: ID do chat (obtido do tracker)
+        cha(obtt_id: ID do chat ido do tracker)
     
     Returns:
         True se enviado com sucesso, False caso contrário
@@ -244,6 +248,7 @@ def enviar_indicador_digitando(chat_id: str) -> bool:
         logger.debug(f"Erro ao enviar indicador de digitando: {e}")
         return False
 
+### FUNÇÃO PARA MANTER INDICADOR DE DIGITANDO ATIVO ###
 def manter_indicador_digitando(chat_id: str, duracao: int = 30) -> threading.Thread:
     """
     Mantém o indicador de digitando ativo por um período.
@@ -286,6 +291,7 @@ def manter_indicador_digitando(chat_id: str, duracao: int = 30) -> threading.Thr
     
     return thread
 
+### FUNÇÃO PARA PARAR INDICADOR DE DIGITANDO ###
 def parar_indicador_digitando(chat_id: str) -> bool:
     """
     Para o indicador de "digitando..." para um chat específico.
@@ -311,6 +317,7 @@ def parar_indicador_digitando(chat_id: str) -> bool:
     
     return False
 
+### FUNÇÃO PARA INICIAR INDICADOR DE DIGITANDO EM UMA ACTION ###
 def iniciar_indicador_em_action(tracker: Tracker, duracao: int = 20) -> Optional[str]:
     """
     Inicia o indicador de "digitando..." para uma action.
@@ -328,6 +335,7 @@ def iniciar_indicador_em_action(tracker: Tracker, duracao: int = 20) -> Optional
         manter_indicador_digitando(chat_id, duracao=duracao)
     return chat_id
 
+### FUNÇÃO PARA PARAR INDICADOR DE DIGITANDO ANTES DE ENVIAR A RESPOSTA FINAL ###
 def parar_indicador_antes_de_resposta(chat_id: Optional[str]) -> None:
     """
     Para o indicador de "digitando..." antes de enviar a resposta final.
@@ -341,6 +349,7 @@ def parar_indicador_antes_de_resposta(chat_id: Optional[str]) -> None:
         # Pequeno delay para garantir que o Telegram processe o comando de parar
         time.sleep(0.1)
 
+### FUNÇÃO PARA DELETAR MENSAGEM DO TELEGRAM ###
 def deletar_mensagem_telegram(chat_id: str, message_id: int) -> bool:
     """
     Deleta uma mensagem do Telegram usando a Bot API.
@@ -379,6 +388,7 @@ def deletar_mensagem_telegram(chat_id: str, message_id: int) -> bool:
         logger.error(f"[Telegram] Erro ao deletar mensagem do Telegram: {e}")
         return False
 
+### FUNÇÃO PARA OBTER CHAT ID DO TRACKER ###
 def obter_chat_id_do_tracker(tracker: Tracker) -> Optional[str]:
     """
     Extrai o chat_id do tracker (para Telegram).
@@ -417,17 +427,19 @@ def obter_chat_id_do_tracker(tracker: Tracker) -> Optional[str]:
     
     return None
 
-# ===================================================================
-# CACHE HELPER
-# ===================================================================
+### CACHE HELPER ###
+### CLASSE PARA CACHE DE REQUISIÇÕES FREQUENTES ###
 class CacheHelper:
-    """Cache de requisições frequentes para melhorar performance"""
+    """
+    Cache de requisições frequentes para melhorar performance
+    """
     _cache_disciplinas = {}
     _cache_professores = {}
     _cache_coordenadores = {}
     _cache_timestamp = {}
     CACHE_TTL = 300  # 5 minutos
     
+    ### FUNÇÃO PARA NORMALIZAR NOME DA DISCIPLINA ###
     @staticmethod
     def _normalizar_nome_disciplina(nome: str) -> str:
         """
@@ -443,6 +455,7 @@ class CacheHelper:
         nome_normalizado = ''.join(char for char in nome_normalizado if unicodedata.category(char) != 'Mn')
         return nome_normalizado.lower()
     
+    ### FUNÇÃO PARA BUSCAR ID DA DISCIPLINA ###
     @staticmethod
     def get_disciplina_id(disciplina_nome: str, headers: dict = None) -> str | None:
         """
@@ -502,6 +515,7 @@ class CacheHelper:
             logger.error(f"Erro ao buscar disciplina via cronograma '{nome_busca}': {e}")
             return None
     
+    ### FUNÇÃO PARA BUSCAR DISCIPLINA NA LISTA COMPLETA ###
     @staticmethod
     def _buscar_disciplina_na_lista(nome_busca: str, headers: dict = None) -> str | None:
         """
@@ -587,6 +601,7 @@ class CacheHelper:
             logger.error(f"Erro ao buscar disciplina na lista: {e}")
             return None
     
+    ### FUNÇÃO PARA BUSCAR LISTA DE PROFESSORES ###
     @staticmethod
     def get_lista_professores() -> list:
         """Busca lista de professores com cache"""
@@ -613,6 +628,7 @@ class CacheHelper:
             logger.error(f"Erro ao buscar professores: {e}")
             return []
     
+    ### FUNÇÃO PARA BUSCAR LISTA DE COORDENADORES ###
     @staticmethod
     def get_lista_coordenadores() -> list:
         """Busca lista de coordenadores com cache"""
@@ -639,6 +655,7 @@ class CacheHelper:
             logger.error(f"Erro ao buscar coordenadores: {e}")
             return []
     
+    ### FUNÇÃO PARA LIMPAR CACHE ###
     @staticmethod
     def clear_cache():
         """Limpa o cache (útil para testes ou atualizações)"""
@@ -648,11 +665,13 @@ class CacheHelper:
         CacheHelper._cache_timestamp.clear()
         logger.info("Cache limpo")
 
-# ===================================================================
-# ERROR HANDLER
-# ===================================================================
+
+### ERROR HANDLER ###
+### CLASSE PARA TRATAR ERROS DE API DE FORMA AMIGÁVEL E REGISTRAR LOGS ###
 class ErrorHandler:
-    """Trata erros de API de forma amigável e registra logs"""
+    """
+    Trata erros de API de forma amigável e registra logs
+    """
     
     # Mensagens variadas para erros 500 (Internal Server Error)
     _MENSAGENS_ERRO_500 = [
@@ -666,6 +685,7 @@ class ErrorHandler:
         "O servidor encontrou um erro inesperado. Tente novamente mais tarde."
     ]
     
+    ### FUNÇÃO PARA OBTER MENSAGEM ALEATÓRIA PARA ERROS 500 ###
     @staticmethod
     def get_mensagem_erro_500() -> str:
         """
@@ -674,6 +694,7 @@ class ErrorHandler:
         """
         return random.choice(ErrorHandler._MENSAGENS_ERRO_500)
     
+    ### FUNÇÃO PARA TRATAR ERROS DE API DE FORMA AMIGÁVEL ###
     @staticmethod
     def handle_api_error(dispatcher: CollectingDispatcher, error: Exception, 
                         context: str = "", action_name: str = ""):
@@ -732,12 +753,19 @@ class ErrorHandler:
                 text="Desculpe, ocorreu um erro inesperado. Por favor, tente novamente."
             )
 
-# ===================================================================
-# RESPONSE VALIDATOR
-# ===================================================================
+
+### RESPONSE VALIDATOR ###
+### CLASSE PARA VALIDAR RESPOSTAS DA API ANTES DE USAR ###
 class ResponseValidator:
-    """Valida respostas da API antes de usar"""
+    """
+    Valida respostas da API antes de usar
     
+    Args:
+        response: Resposta da API
+        expected_keys: Chaves esperadas na resposta
+    """
+    
+    ### FUNÇÃO PARA VALIDAR RESPOSTA JSON DA API ###
     @staticmethod
     def validate_json_response(response: requests.Response, 
                               expected_keys: List[str] = None) -> Optional[Dict]:
@@ -755,10 +783,13 @@ class ResponseValidator:
         except json.JSONDecodeError as e:
             logger.error(f"Resposta da API nao e JSON valido: {e}")
             return None
-    
+    ### FUNÇÃO PARA VALIDAR RESPOSTA DE LISTA ###
     @staticmethod
     def validate_list_response(response: requests.Response) -> List:
-        """Valida se a resposta é uma lista válida"""
+        """
+        Valida se a resposta é uma lista válida.
+        Suporta diferentes formatos de resposta da API.
+        """
         try:
             data = response.json()
             
@@ -774,6 +805,7 @@ class ResponseValidator:
             logger.error(f"Resposta da API nao e JSON valido: {e}")
             return []
 
+### FUNÇÃO PARA SALVAR PERGUNTA DO ALUNO ###
 def salvar_pergunta_aluno(pergunta: str, topico: list[str] = None, tracker: Tracker = None, headers: dict = None) -> bool:
     """
     Salva a pergunta do aluno no endpoint de mensagens.
@@ -814,9 +846,11 @@ def salvar_pergunta_aluno(pergunta: str, topico: list[str] = None, tracker: Trac
         response.raise_for_status()
         return True
     except Exception as e:
-        print(f"Erro ao salvar pergunta: {e}")
+        # CORREÇÃO: Usar logger ao invés de print para consistência
+        logger.error(f"Erro ao salvar pergunta: {e}")
         return False
 
+### FUNÇÃO PARA EXTRAIR TÓPICOS DA PERGUNTA ###
 def extrair_topicos_da_pergunta(pergunta: str, headers: dict = None) -> list[str]:
     """
     Extrai tópicos da pergunta.
@@ -873,10 +907,12 @@ def extrair_topicos_da_pergunta(pergunta: str, headers: dict = None) -> list[str
                     topicos.append("Conteúdo")
         except Exception as e:
             logger.debug(f"Erro ao verificar conteudo na base de conhecimento: {e}")
-            pass
+            # Pass silencioso - se falhar, continua sem adicionar tópico de conteúdo
     
+    # Retornar tópicos encontrados ou "Geral" como padrão
     return topicos if topicos else ["Geral"]
 
+### FUNÇÃO HELPER PARA BUSCAR ID DE DISCIPLINA POR NOME ###
 def get_disciplina_id_by_name(disciplina_nome: Text, tracker: Tracker = None) -> str | None:
     """
     Busca ID de disciplina usando cache.
@@ -892,6 +928,7 @@ def get_disciplina_id_by_name(disciplina_nome: Text, tracker: Tracker = None) ->
     
     return CacheHelper.get_disciplina_id(disciplina_nome, headers)
 
+### FUNÇÃO PARA BUSCAR URLs DE DOCUMENTOS RELACIONADOS ###
 def buscar_urls_documentos_relacionados(termo_busca: str, limite: int = 3, headers: dict = None) -> list[str]:
     """
     Busca URLs de documentos relacionados a um termo usando endpoints existentes da API.
@@ -967,6 +1004,9 @@ def buscar_urls_documentos_relacionados(termo_busca: str, limite: int = 3, heade
         logger.warning(f"Erro ao buscar URLs de documentos: {e}")
         return []
 
+### AÇÕES DE BUSCA E CONSULTA ###
+
+### CLASSE PARA BUSCAR ÚLTIMOS AVISOS ###
 class ActionBuscarUltimosAvisos(Action):
     def name(self) -> Text:
         return "action_buscar_ultimos_avisos"
@@ -1039,7 +1079,12 @@ class ActionBuscarUltimosAvisos(Action):
             )
         return eventos
 
+### CLASSE PARA BUSCAR CRONOGRAMA DE DISCIPLINA ###
 class ActionBuscarCronograma(Action):
+    """
+    Action para buscar o cronograma/horário de uma disciplina específica.
+    Extrai o nome da disciplina da mensagem do usuário e retorna os horários cadastrados.
+    """
     def name(self) -> Text:
         return "action_buscar_cronograma"
 
@@ -1165,11 +1210,13 @@ class ActionBuscarCronograma(Action):
             )
         return []
 
-#
-# ... (mantenha todas as outras classes de actions iguais) ...
-#
-
+### CLASSE PARA GERAR RESPOSTA COM IA ###
 class ActionGerarRespostaComIA(Action):
+    """
+    Action para gerar resposta usando IA (base de conhecimento).
+    Busca informações na base de conhecimento e retorna resposta contextualizada.
+    Também inclui URLs de documentos relacionados quando disponíveis.
+    """
     def name(self) -> Text:
         return "action_gerar_resposta_com_ia"
 
@@ -1270,7 +1317,13 @@ class ActionGerarRespostaComIA(Action):
             
         return []
 
+### CLASSE PARA BUSCAR DATA DE AVALIAÇÃO ###
 class ActionBuscarDataAvaliacao(Action):
+    """
+    Action para buscar datas de avaliações (provas) de uma disciplina.
+    Suporta diferentes tipos de avaliação (NP1, NP2, SUB, EXAME).
+    Também redireciona para cronograma se a pergunta for sobre horário de aula.
+    """
     def name(self) -> Text:
         return "action_buscar_data_avaliacao"
 
@@ -1357,10 +1410,14 @@ class ActionBuscarDataAvaliacao(Action):
             return action_listar.run(dispatcher, tracker, domain)
         
         # Verificar se é pergunta sobre provas em mês específico
+        # NOTA: ActionBuscarProvasPorMes não está implementada - usar listagem geral
         mes_entidade = next(tracker.get_latest_entity_values("mes"), None)
         if mes_entidade or any(mes in pergunta_lower for mes in ["novembro", "dezembro", "outubro", "setembro", "agosto", "julho", "junho", "maio", "abril", "marco", "fevereiro", "janeiro"]):
-            action_provas_mes = ActionBuscarProvasPorMes()
-            return action_provas_mes.run(dispatcher, tracker, domain)
+            # TODO: Implementar ActionBuscarProvasPorMes para filtrar provas por mês
+            # Por enquanto, usar ActionListarTodasProvas como fallback
+            logger.info(f"[{self.name()}] Pergunta sobre provas por mes detectada. Usando listagem geral.")
+            action_listar = ActionListarTodasProvas()
+            return action_listar.run(dispatcher, tracker, domain)
         
         disciplina_nome = next(tracker.get_latest_entity_values("disciplina"), None)
         termo_busca = next(tracker.get_latest_entity_values("tipo_avaliacao"), None)
@@ -1527,9 +1584,6 @@ class ActionBuscarDataAvaliacao(Action):
                 elif termo_busca_lower == "exame" and tipo_aval_lower == "exame":
                     encontradas.append(f"- {tipo_aval}: {data_fmt}{horario_str}")
 
-                # actions_reserva.md - 01
-
-
             # Parar indicador antes de enviar resposta
             chat_id = obter_chat_id_do_tracker(tracker)
             parar_indicador_antes_de_resposta(chat_id)
@@ -1552,7 +1606,13 @@ class ActionBuscarDataAvaliacao(Action):
             )
         return []
 
+### CLASSE PARA BUSCAR CONTEÚDO DE AVALIAÇÃO ###
 class ActionBuscarConteudoAvaliacao(Action):
+    """
+    Action para buscar o conteúdo programático de uma avaliação específica.
+    Suporta diferentes tipos de avaliação (NP1, NP2, SUB, EXAME).
+    Verifica se a disciplina é AVA e retorna mensagem apropriada.
+    """
     def name(self) -> Text:
         return "action_buscar_conteudo_avaliacao"
 
@@ -1591,8 +1651,10 @@ class ActionBuscarConteudoAvaliacao(Action):
                     logger.info(f"[{self.name()}] Usando disciplina do contexto anterior: '{disciplina_nome}'")
         
         # Mapear abreviações
-        if disciplina_nome:
-            disciplina_nome = CacheHelper._mapear_abreviacao_para_nome_completo(disciplina_nome)
+        # NOTA: Método _mapear_abreviacao_para_nome_completo não está implementado em CacheHelper
+        # TODO: Implementar mapeamento de abreviações ou remover esta funcionalidade
+        # if disciplina_nome:
+        #     disciplina_nome = CacheHelper._mapear_abreviacao_para_nome_completo(disciplina_nome)
         
         # Extrair tipo de avaliação
         tipo_avaliacao = next(tracker.get_latest_entity_values("tipo_avaliacao"), None)
@@ -1721,7 +1783,12 @@ class ActionBuscarConteudoAvaliacao(Action):
         
         return []
 
+### CLASSE PARA LISTAR TODAS AS PROVAS ###
 class ActionListarTodasProvas(Action):
+    """
+    Action para listar todas as provas agendadas de todas as disciplinas do aluno.
+    Busca todas as disciplinas e suas respectivas avaliações, formatando as informações.
+    """
     def name(self) -> Text:
         return "action_listar_todas_provas"
 
@@ -1869,6 +1936,7 @@ class ActionListarTodasProvas(Action):
         
         return []
 
+### CLASSE PARA BUSCAR INFORMAÇÕES DE ATIVIDADE ACADÊMICA ###
 class ActionBuscarInfoAtividadeAcademica(Action):
     def name(self) -> Text:
         return "action_buscar_info_atividade_academica"
@@ -2289,6 +2357,7 @@ class ActionBuscarInfoAtividadeAcademica(Action):
             )
         return []
 
+### CLASSE PARA BUSCAR ATENDIMENTO DOCENTE ###
 class ActionBuscarAtendimentoDocente(Action):
     def name(self) -> Text:
         return "action_buscar_atendimento_docente"
@@ -2543,6 +2612,7 @@ class ActionBuscarAtendimentoDocente(Action):
             
         return [SlotSet("nome_docente", None)] # Limpa o slot
 
+### CLASSE PARA BUSCAR MATERIAL DE DISCIPLINA ###
 class ActionBuscarMaterial(Action):
     def name(self) -> Text:
         return "action_buscar_material"
@@ -2640,6 +2710,7 @@ class ActionBuscarMaterial(Action):
         # Limpa o slot para a proxima pergunta
         return [SlotSet("disciplina", None)]
     
+### CLASSE PARA BUSCAR EMENTA DE DISCIPLINA ###
 class ActionBuscarEmenta(Action):
     def name(self) -> Text:
         return "action_buscar_ementa"
@@ -2746,6 +2817,7 @@ class ActionBuscarEmenta(Action):
         
         return []
 
+### CLASSE PARA BUSCAR INFORMAÇÕES DO DOCENTE ###
 class ActionBuscarInfoDocente(Action):
     def name(self) -> Text:
         return "action_buscar_info_docente"
@@ -2907,6 +2979,7 @@ class ActionBuscarInfoDocente(Action):
             )
         return []
 
+### CLASSE PARA BUSCAR DÚVIDAS FREQUENTES ###
 class ActionBuscarDuvidasFrequentes(Action):
     def name(self) -> Text:
         return "action_buscar_duvidas_frequentes"
@@ -3022,10 +3095,9 @@ class ActionBuscarDuvidasFrequentes(Action):
         
         return []
 
-# ===================================================================
-# AÇÕES DE AUTENTICAÇÃO
-# ===================================================================
+### AÇÕES DE AUTENTICAÇÃO ###
 
+### CLASSE PARA ENVIAR SAUDAÇÃO ###
 class ActionSaudacao(Action):
     """
     Action para enviar saudação dinâmica baseada no horário e contexto da mensagem do usuário.
@@ -3065,6 +3137,7 @@ class ActionSaudacao(Action):
         return []
 
 
+### CLASSE PARA VERIFICAR AUTENTICAÇÃO ###
 class ActionVerificarAutenticacao(Action):
     """
     Action para verificar se o usuário já está autenticado.
@@ -3089,6 +3162,7 @@ class ActionVerificarAutenticacao(Action):
             return []
 
 
+### CLASSE PARA VERIFICAR INATIVIDADE ###
 class ActionVerificarInatividade(Action):
     """
     Action para verificar se o usuário está inativo há mais de 10 minutos.
@@ -3149,6 +3223,7 @@ class ActionVerificarInatividade(Action):
             return [SlotSet("ultima_atividade_timestamp", timestamp_atual)]
 
 
+### CLASSE PARA INTERCEPTAR INTENÇÕES NÃO AUTENTICADAS ###
 class ActionInterceptarIntencoesNaoAutenticado(Action):
     """
     Action para interceptar todas as intenções quando o usuário não está autenticado.
@@ -3188,6 +3263,7 @@ class ActionInterceptarIntencoesNaoAutenticado(Action):
         return eventos_inatividade
 
 
+### CLASSE PARA BUSCAR ALUNO POR EMAIL ###
 class ActionBuscarAlunoPorEmail(Action):
     """
     Action para buscar aluno por email e armazenar o RA em cache.
@@ -3279,6 +3355,7 @@ class ActionBuscarAlunoPorEmail(Action):
             ]
 
 
+### CLASSE PARA AUTENTICAR CHATBOT ###
 class ActionAutenticarChatbot(Action):
     """
     Action para autenticar o usuário via chatbot usando validação parcial do RA.
@@ -3514,6 +3591,7 @@ class ActionAutenticarChatbot(Action):
             ]
 
 
+### CLASSE PARA DELETAR MENSAGENS SENSÍVEIS ###
 class ActionDeletarMensagensSensiveis(Action):
     """
     Action para deletar mensagens sensíveis do Telegram após autenticação.
@@ -3595,6 +3673,7 @@ class ActionDeletarMensagensSensiveis(Action):
         return []
 
 
+### CLASSE PARA ESCOLHER PERGUNTA SOBRE RA ###
 class ActionEscolherPerguntaRA(Action):
     """
     Action para escolher aleatoriamente o tipo de pergunta sobre o RA.
@@ -3665,6 +3744,7 @@ class ActionEscolherPerguntaRA(Action):
         return slots
 
 
+### CLASSE PARA FAZER PERGUNTA SOBRE RA ###
 class ActionFazerPerguntaRA(Action):
     """
     Action para fazer a pergunta sobre o RA baseada no tipo escolhido.
@@ -3723,6 +3803,7 @@ class ActionFazerPerguntaRA(Action):
         return []
 
 
+### CLASSE PARA CONSULTAR QUANTIDADE DE ALUNOS NA TURMA ###
 class ActionConsultarQuantidadeAlunosTurma(Action):
     """
     Action para consultar quantos alunos tem na mesma turma do aluno autenticado.

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""
-Script para criar os arquivos .env e .env.example
-Execute: python3 setup_env.py
-"""
+
+## Script para criar os arquivos .env e .env.example ##
+## Execute: python3 setup_env.py ##
+
 
 import os
 from pathlib import Path
